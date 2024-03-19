@@ -27,48 +27,63 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AdaptiveLayout(
+        transitionDuration: const Duration(milliseconds: 500),
         primaryNavigation: SlotLayout(
           config: {
-            Breakpoints.smallAndUp: SlotLayout.from(
-              key: const Key('home'),
+            Breakpoints.standard: SlotLayout.from(
+              key: const Key('navigation'),
               builder: (context) => SizedBox(
-                width: 300,
-                child: ListView.builder(
-                  itemCount: surahs.length,
-                  itemBuilder: (context, index) {
-                    final surah = surahs[index];
-                    return ListTile(
-                      leading: Text('${index + 1}'),
-                      subtitle: Text(surah.english),
-                      title: Text(surah.name),
-                      selected: surah == this.surah,
-                      onTap: () {
-                        setState(() {
-                          this.surah = surah;
-                        });
-                        if (!Breakpoints.mediumAndUp.isActive(context)) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => DetailScreen(surah: surah),
-                            ),
-                          );
-                        }
-                      },
-                    );
-                  },
+                width: 360,
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: const Text('The Holy Quran'),
+                  ),
+                  body: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: surahs.length,
+                    itemBuilder: (context, index) {
+                      final surah = surahs[index];
+                      final tileColor = index % 2 == 0
+                          ? const Color(0xFFF9FBC0)
+                          : const Color(0xFFFEFFDD);
+
+                      return ListTile(
+                        selectedTileColor: const Color(0xFFFFFFFF),
+                        focusColor: const Color(0xffF0D883),
+                        tileColor: tileColor,
+                        leading: Text('${index + 1}'),
+                        subtitle: Text(surah.english),
+                        title: Text(surah.name),
+                        selected: surah == this.surah,
+                        onTap: () {
+                          setState(() {
+                            this.surah = surah;
+                          });
+                          if (!Breakpoints.mediumAndUp.isActive(context)) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailScreen(surah: surah),
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
-            )
+            ),
           },
         ),
         body: SlotLayout(
           config: {
-            Breakpoints.smallAndUp: SlotLayout.from(
+            Breakpoints.mediumAndUp: SlotLayout.from(
               key: UniqueKey(),
-              builder: (context) => Center(
-                child: Text('${surah?.english}'),
-              ),
-            )
+              builder: (context) => surah != null
+                  ? DetailScreen(surah: surah!)
+                  : const SizedBox(),
+            ),
           },
         ),
       ),
@@ -86,13 +101,23 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Breakpoints.mediumAndUp.isActive(context)) {
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (Breakpoints.mediumAndUp.isActive(context)) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      }
+    });
 
     return Scaffold(
+      appBar: !Breakpoints.mediumAndUp.isActive(context)
+          ? AppBar(
+              title: Text(surah.english),
+            )
+          : null,
       body: Center(
-        child: Text(surah.english),
+        child: Image.network(
+          'https://github.com/aymendn/the-holy-quran-app-flutter/blob/main/assets/quran-images/page017.png?raw=true',
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }
