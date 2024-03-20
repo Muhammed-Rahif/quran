@@ -18,3 +18,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/quran/page-images/
+
+  fonts:
+    - family: MeQuran
+      fonts:
+        - asset: assets/fonts/me_quran-Regular.ttf
+        - asset: assets/fonts/me_quran-Regular.ttf

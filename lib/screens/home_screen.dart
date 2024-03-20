@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
-import 'package:quran/data/surah.dart';
+import 'package:quran/classes/surah.dart';
+import 'package:quran/screens/surah_screen.dart';
+import 'package:quran/widgets/list_surahs.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,17 +14,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Surah? surah;
 
-  List<NavigationDestination> destinations = const [
-    NavigationDestination(
-      label: 'Home',
-      icon: Icon(Icons.home),
-    ),
-    NavigationDestination(
-      label: 'Settings',
-      icon: Icon(Icons.settings),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,45 +22,20 @@ class _HomeScreenState extends State<HomeScreen> {
         primaryNavigation: SlotLayout(
           config: {
             Breakpoints.standard: SlotLayout.from(
-              key: const Key('navigation'),
+              key: const Key('primary_navigation'),
               builder: (context) => SizedBox(
-                width: 360,
+                width: Breakpoints.mediumAndUp.isActive(context)
+                    ? 360
+                    : double.infinity,
                 child: Scaffold(
-                  appBar: AppBar(
-                    title: const Text('The Holy Quran'),
-                  ),
-                  body: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: surahs.length,
-                    itemBuilder: (context, index) {
-                      final surah = surahs[index];
-                      final tileColor = index % 2 == 0
-                          ? const Color(0xFFF9FBC0)
-                          : const Color(0xFFFEFFDD);
-
-                      return ListTile(
-                        selectedTileColor: const Color(0xFFFFFFFF),
-                        focusColor: const Color(0xffF0D883),
-                        tileColor: tileColor,
-                        leading: Text('${index + 1}'),
-                        subtitle: Text(surah.english),
-                        title: Text(surah.name),
-                        selected: surah == this.surah,
-                        onTap: () {
-                          setState(() {
-                            this.surah = surah;
-                          });
-                          if (!Breakpoints.mediumAndUp.isActive(context)) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    DetailScreen(surah: surah),
-                              ),
-                            );
-                          }
-                        },
-                      );
-                    },
+                  body: ListView(
+                    children: [
+                      const LastReadCard(),
+                      ListSurahs(
+                        selectedSurah: surah,
+                        onSurahClick: (srh) => setState(() => surah = srh),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -80,9 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
           config: {
             Breakpoints.mediumAndUp: SlotLayout.from(
               key: UniqueKey(),
-              builder: (context) => surah != null
-                  ? DetailScreen(surah: surah!)
-                  : const SizedBox(),
+              builder: (context) =>
+                  surah != null ? SurahScreen(surah: surah!) : const SizedBox(),
             ),
           },
         ),
@@ -91,32 +56,84 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class DetailScreen extends StatelessWidget {
-  const DetailScreen({
+class LastReadCard extends StatelessWidget {
+  const LastReadCard({
     super.key,
-    required this.surah,
   });
-
-  final Surah surah;
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (Breakpoints.mediumAndUp.isActive(context)) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
-      }
-    });
-
-    return Scaffold(
-      appBar: !Breakpoints.mediumAndUp.isActive(context)
-          ? AppBar(
-              title: Text(surah.english),
-            )
-          : null,
-      body: Center(
-        child: Image.network(
-          'https://github.com/aymendn/the-holy-quran-app-flutter/blob/main/assets/quran-images/page017.png?raw=true',
-          fit: BoxFit.fill,
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Ink(
+        height: 140,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).colorScheme.primary,
+          image: const DecorationImage(
+            image:
+                AssetImage('assets/images/flat-arabic-pattern-background.jpg'),
+            fit: BoxFit.cover,
+            opacity: .2,
+          ),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          splashFactory: NoSplash.splashFactory,
+          onTap: () {},
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Last Read',
+                      style: TextStyle(
+                        color: Color(0xff1E242B),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Image.asset(
+                      'assets/images/bismillah-calligraphy.png',
+                      height: 40,
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Al Fatihah',
+                          style: TextStyle(
+                            color: Color(0xff1E242B),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Ayah 1',
+                          style: TextStyle(
+                            color: Color(0xff1E242B),
+                          ),
+                        ),
+                      ],
+                    ),
+                    IconButton.filled(
+                      onPressed: () {},
+                      icon: const Icon(Icons.bookmark),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

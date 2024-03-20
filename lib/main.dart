@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:quran/screens/home_screen.dart';
-import 'package:quran/theme/theme.dart';
 
 void main() {
   runApp(const MainApp());
@@ -13,10 +12,11 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: SepiaTheme().textPrimary,
-          secondary: SepiaTheme().textSecondary,
-          background: SepiaTheme().backgroundPrimary,
+        colorScheme: ColorScheme.fromSwatch(
+          brightness: Brightness.dark,
+        ).copyWith(
+          primary: const Color(0xffefb975),
+          background: const Color(0xff151515),
         ),
       ),
       home: const HomeScreen(),
