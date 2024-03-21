@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_adaptive_scaffold: ^0.1.8
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:
@@ -21,7 +22,7 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/quran/page-images/
+    # - assets/quran/page-images/
 
   fonts:
     - family: MeQuran

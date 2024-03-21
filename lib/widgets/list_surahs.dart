@@ -11,14 +11,17 @@ class ListSurahs extends StatelessWidget {
     this.onSurahClick,
   });
 
-  final Function(Surah surah)? onSurahClick;
+  final void Function(Surah surah)? onSurahClick;
   final Surah? selectedSurah;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
+      shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       children: surahs.map((surah) {
         return InkWell(
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           splashFactory: NoSplash.splashFactory,
           onTap: () {
             onSurahClick?.call(surah);
@@ -32,6 +35,7 @@ class ListSurahs extends StatelessWidget {
             }
           },
           child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 8),
             tileColor: Colors.transparent,
             leading: Stack(
               alignment: Alignment.center,
