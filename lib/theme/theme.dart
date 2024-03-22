@@ -1,37 +1,39 @@
 import 'package:flutter/material.dart';
 
-abstract class ThemePalette {
-  ThemePalette({
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.backgroundPrimary,
-    required this.backgroundSecondary,
-  });
-
-  Color textPrimary;
-  Color textSecondary;
-  Color backgroundPrimary;
-  Color backgroundSecondary;
+class AppColors {
+  static const Color primaryColor = Color(0xffEDD681);
+  static const Color backgroundColor = Color(0xff151515);
 }
 
-class DarkTheme implements ThemePalette {
-  @override
-  Color backgroundPrimary = const Color(0xff1f2125);
-  @override
-  Color backgroundSecondary = const Color(0xff777777);
-  @override
-  Color textPrimary = const Color(0xffE7E9EA);
-  @override
-  Color textSecondary = const Color(0xff777777);
-}
+class AppTheme {
+  static ThemeData get data {
+    final searchBarColor =
+        MaterialStateColor.resolveWith((states) => AppColors.primaryColor);
+    final searchViewColor = MaterialStateColor.resolveWith(
+        (states) => AppColors.primaryColor.withOpacity(.8));
 
-class SepiaTheme implements ThemePalette {
-  @override
-  Color backgroundPrimary = const Color(0xffF8EBD5);
-  @override
-  Color backgroundSecondary = const Color(0xffF2E0BF);
-  @override
-  Color textPrimary = const Color(0xff000000);
-  @override
-  Color textSecondary = const Color(0xff666666);
+    return ThemeData(
+      appBarTheme: const AppBarTheme(
+        elevation: 0,
+        color: AppColors.primaryColor,
+        foregroundColor: AppColors.backgroundColor,
+      ),
+      searchBarTheme: SearchBarThemeData(
+        backgroundColor: searchBarColor,
+        overlayColor: searchBarColor,
+        surfaceTintColor: searchBarColor,
+      ),
+      searchViewTheme: SearchViewThemeData(
+        backgroundColor: searchViewColor,
+        surfaceTintColor: searchViewColor,
+      ),
+      primaryColor: AppColors.primaryColor,
+      colorScheme: ColorScheme.fromSwatch(
+        brightness: Brightness.dark,
+      ).copyWith(
+        primary: AppColors.primaryColor,
+        background: AppColors.backgroundColor,
+      ),
+    );
+  }
 }

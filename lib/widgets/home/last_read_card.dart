@@ -11,7 +11,7 @@ class LastReadCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10).copyWith(bottom: expanded ? 10 : 0),
+      padding: const EdgeInsets.all(10).copyWith(bottom: 0),
       child: AnimatedContainer(
         curve: Curves.fastOutSlowIn,
         duration: const Duration(milliseconds: 300),

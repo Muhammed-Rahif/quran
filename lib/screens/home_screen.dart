@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
-import 'package:quran/classes/surah.dart';
-import 'package:quran/main.dart';
-import 'package:quran/screens/surah_screen.dart';
+import 'package:quran/classes/chapter.dart';
+import 'package:quran/screens/chapter_screen.dart';
+import 'package:quran/theme/theme.dart';
 import 'package:quran/widgets/home/surah_tab_bar_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,10 +13,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Surah? surah;
+  Chapter? chapter;
 
-  void onSurahClick(Surah srh) {
-    setState(() => surah = srh);
+  void onChapterClick(Chapter chptr) {
+    setState(() => chapter = chptr);
   }
 
   @override
@@ -29,18 +29,18 @@ class _HomeScreenState extends State<HomeScreen> {
             Breakpoints.standard: SlotLayout.from(
               key: const Key('standard_primary_navigation'),
               builder: (context) => StandardPrimaryNavigation(
-                selectedSurah: surah,
-                onSurahClick: onSurahClick,
+                selectedChapter: chapter,
+                onChapterClick: onChapterClick,
               ),
             ),
           },
         ),
         body: SlotLayout(
           config: {
-            if (surah != null)
+            if (chapter != null)
               Breakpoints.mediumAndUp: SlotLayout.from(
                 key: UniqueKey(),
-                builder: (context) => SurahScreen(surah: surah!),
+                builder: (context) => ChapterScreen(chapter: chapter!),
               ),
           },
         ),
@@ -52,12 +52,12 @@ class _HomeScreenState extends State<HomeScreen> {
 class StandardPrimaryNavigation extends StatelessWidget {
   const StandardPrimaryNavigation({
     super.key,
-    required this.selectedSurah,
-    required this.onSurahClick,
+    required this.selectedChapter,
+    required this.onChapterClick,
   });
 
-  final Surah? selectedSurah;
-  final void Function(Surah)? onSurahClick;
+  final Chapter? selectedChapter;
+  final void Function(Chapter)? onChapterClick;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class StandardPrimaryNavigation extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             foregroundColor: Colors.white,
-            backgroundColor: backgroundColor,
+            backgroundColor: AppColors.backgroundColor,
             title: const Text('Quran App'),
             actions: [
               IconButton(
@@ -83,7 +83,7 @@ class StandardPrimaryNavigation extends StatelessWidget {
             ],
             bottom: const TabBar(
               splashFactory: NoSplash.splashFactory,
-              indicatorColor: primaryColor,
+              indicatorColor: AppColors.primaryColor,
               tabs: <Widget>[
                 Tab(text: 'Surahs'),
                 Tab(text: 'Juz'),
@@ -94,8 +94,8 @@ class StandardPrimaryNavigation extends StatelessWidget {
           body: TabBarView(
             children: <Widget>[
               SurahTabBarView(
-                selectedSurah: selectedSurah,
-                onSurahClick: onSurahClick,
+                selectedChapter: selectedChapter,
+                onChapterClick: onChapterClick,
               ),
               const Center(child: Text("Juz is not available yet")),
               const Center(child: Text("Bookmarks is not available yet")),

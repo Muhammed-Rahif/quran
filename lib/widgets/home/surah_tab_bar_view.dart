@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:quran/classes/surah.dart';
+import 'package:quran/classes/chapter.dart';
 import 'package:quran/widgets/home/last_read_card.dart';
-import 'package:quran/widgets/list_surahs.dart';
+import 'package:quran/widgets/list_chapters.dart';
 
 class SurahTabBarView extends StatefulWidget {
   const SurahTabBarView({
     super.key,
-    required this.selectedSurah,
-    required this.onSurahClick,
+    required this.selectedChapter,
+    required this.onChapterClick,
   });
 
-  final Surah? selectedSurah;
-  final void Function(Surah surah)? onSurahClick;
+  final Chapter? selectedChapter;
+  final void Function(Chapter chapter)? onChapterClick;
 
   @override
   State<SurahTabBarView> createState() => _SurahTabBarViewState();
@@ -37,10 +37,10 @@ class _SurahTabBarViewState extends State<SurahTabBarView> {
     return Column(
       children: [
         LastReadCard(expanded: !isScrolled),
-        ListSurahs(
+        ListChapters(
           scrollController: scrollController,
-          selectedSurah: widget.selectedSurah,
-          onSurahClick: widget.onSurahClick,
+          selectedChapter: widget.selectedChapter,
+          onChapterClick: widget.onChapterClick,
         ),
       ],
     );

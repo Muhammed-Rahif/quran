@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   flutter_adaptive_scaffold: ^0.1.8
   carousel_slider: ^4.2.1
+  dio: ^5.4.1
 
 dev_dependencies:
   flutter_test:
@@ -25,7 +26,9 @@ flutter:
     # - assets/quran/page-images/
 
   fonts:
-    - family: MeQuran
+    - family: Me Quran
       fonts:
-        - asset: assets/fonts/me_quran-Regular.ttf
-        - asset: assets/fonts/me_quran-Regular.ttf
+        - asset: assets/fonts/Me-Quran-Regular.ttf
+    - family: Uthmanic Script
+      fonts:
+        - asset: assets/fonts/Uthmanic-Script-HAFS-Regular.otf
