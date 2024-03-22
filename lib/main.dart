@@ -19,6 +19,7 @@ class MainApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           elevation: 0,
           color: primaryColor,
+          foregroundColor: backgroundColor,
         ),
         searchBarTheme: SearchBarThemeData(
           backgroundColor:

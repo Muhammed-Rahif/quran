@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:quran/classes/surah.dart';
 import 'package:quran/main.dart';
 import 'package:quran/screens/surah_screen.dart';
-import 'package:quran/widgets/last_read_card.dart';
-import 'package:quran/widgets/list_surahs.dart';
+import 'package:quran/widgets/home/surah_tab_bar_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Breakpoints.standard: SlotLayout.from(
               key: const Key('standard_primary_navigation'),
               builder: (context) => StandardPrimaryNavigation(
-                surah: surah,
+                selectedSurah: surah,
                 onSurahClick: onSurahClick,
               ),
             ),
@@ -54,11 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
 class StandardPrimaryNavigation extends StatelessWidget {
   const StandardPrimaryNavigation({
     super.key,
-    required this.surah,
+    required this.selectedSurah,
     required this.onSurahClick,
   });
 
-  final Surah? surah;
+  final Surah? selectedSurah;
   final void Function(Surah)? onSurahClick;
 
   @override
@@ -69,8 +67,8 @@ class StandardPrimaryNavigation extends StatelessWidget {
         initialIndex: 0,
         length: 3,
         child: Scaffold(
-          extendBodyBehindAppBar: true,
           appBar: AppBar(
+            foregroundColor: Colors.white,
             backgroundColor: backgroundColor,
             title: const Text('Quran App'),
             actions: [
@@ -95,14 +93,9 @@ class StandardPrimaryNavigation extends StatelessWidget {
           ),
           body: TabBarView(
             children: <Widget>[
-              ListView(
-                children: [
-                  const LastReadCard(),
-                  ListSurahs(
-                    selectedSurah: surah,
-                    onSurahClick: onSurahClick,
-                  ),
-                ],
+              SurahTabBarView(
+                selectedSurah: selectedSurah,
+                onSurahClick: onSurahClick,
               ),
               const Center(child: Text("Juz is not available yet")),
               const Center(child: Text("Bookmarks is not available yet")),
