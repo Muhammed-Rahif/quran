@@ -3,9 +3,10 @@ import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:quran/classes/chapter.dart';
 import 'package:quran/providers/chapters_provider.dart';
-import 'package:quran/providers/quran_provider.dart';
+import 'package:quran/widgets/display_error.dart';
+import 'package:quran/widgets/quran_page.dart';
 
-class ChapterScreen extends StatelessWidget {
+class ChapterScreen extends StatefulWidget {
   const ChapterScreen({
     super.key,
     required this.chapter,
@@ -14,6 +15,14 @@ class ChapterScreen extends StatelessWidget {
 
   final Chapter chapter;
   final VoidCallback? onBack;
+
+  @override
+  State<ChapterScreen> createState() => _ChapterScreenState();
+}
+
+class _ChapterScreenState extends State<ChapterScreen> {
+  late Future chaptersByIdFuture =
+      ChaptersProvider.getChaptersById(widget.chapter.id);
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +35,10 @@ class ChapterScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         notificationPredicate: (notification) => true,
-        title: Text(chapter.nameSimple),
+        title: Text(widget.chapter.nameSimple),
         leading: IconButton.filled(
           isSelected: true,
-          onPressed: onBack ??
+          onPressed: widget.onBack ??
               () => Navigator.of(context).popUntil((route) => route.isFirst),
           icon: const Icon(Icons.arrow_back_ios_rounded),
         ),
@@ -38,18 +47,21 @@ class ChapterScreen extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-        future: ChaptersProvider.getChaptersById(chapter.id),
+        future: chaptersByIdFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                snapshot.error.toString(),
-                style: const TextStyle(color: Colors.red),
-              ),
+            return DisplayError(
+              error: snapshot.error.toString(),
+              onRetry: () {
+                setState(() {
+                  chaptersByIdFuture =
+                      ChaptersProvider.getChaptersById(widget.chapter.id);
+                });
+              },
             );
           }
 
@@ -59,6 +71,7 @@ class ChapterScreen extends StatelessWidget {
             children: [
               CarouselSlider(
                 options: CarouselOptions(
+                  reverse: true,
                   enableInfiniteScroll: false,
                   initialPage: chapter.pages.first - 1,
                   enlargeCenterPage: false,
@@ -67,55 +80,11 @@ class ChapterScreen extends StatelessWidget {
                 ),
                 items: List.generate(604, (indx) => indx).map(
                   (indx) {
-                    return FutureBuilder(
-                      future:
-                          QuranProvider.getUthmaniScriptQuranByPage(indx + 1),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-
-                        if (snapshot.hasError) {
-                          return Center(
-                            child: Text(
-                              snapshot.error.toString(),
-                              style: const TextStyle(color: Colors.red),
-                            ),
-                          );
-                        }
-
-                        final verses = snapshot.data!;
-
-                        return SizedBox(
-                          width: double.infinity,
-                          child: ColorFiltered(
-                            // invert the color of the image
-                            colorFilter: const ColorFilter.matrix(<double>[
-                              -1.0, 0.0, 0.0, 0.0, 255.0, //
-                              0.0, -1.0, 0.0, 0.0, 255.0, //
-                              0.0, 0.0, -1.0, 0.0, 255.0, //
-                              0.0, 0.0, 0.0, 1.0, 0.0, //
-                            ]),
-                            child: SingleChildScrollView(
-                              padding: const EdgeInsets.all(10),
-                              child: Text(
-                                verses
-                                    .map((verse) => verse.textUthmani)
-                                    .join('\n'),
-                                style: const TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                  fontFamily: 'Uthmanic Script',
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                    /// Builder is used to prevent the page from being built
+                    /// until it is needed.
+                    return Builder(builder: (context) {
+                      return QuranPage(pageNo: indx + 1);
+                    });
                   },
                 ).toList(),
               ),

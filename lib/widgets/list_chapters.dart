@@ -3,6 +3,7 @@ import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:quran/classes/chapter.dart';
 import 'package:quran/providers/chapters_provider.dart';
 import 'package:quran/screens/chapter_screen.dart';
+import 'package:quran/widgets/display_error.dart';
 
 class ListChapters extends StatefulWidget {
   const ListChapters({
@@ -34,23 +35,13 @@ class _ListChaptersState extends State<ListChapters> {
           }
 
           if (snapshot.hasError) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  snapshot.error.toString(),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      allChaptersFuture = ChaptersProvider.getAllChapters();
-                    });
-                  },
-                  child: const Text('Retry'),
-                )
-              ],
+            return DisplayError(
+              error: snapshot.error.toString(),
+              onRetry: () {
+                setState(() {
+                  allChaptersFuture = ChaptersProvider.getAllChapters();
+                });
+              },
             );
           }
 

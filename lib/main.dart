@@ -12,6 +12,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('ar'), // Arabic
+      ],
       debugShowCheckedModeBanner: false,
       theme: AppTheme.data,
       home: const HomeScreen(),

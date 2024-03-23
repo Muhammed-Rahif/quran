@@ -11,10 +11,18 @@ class VersesProvider {
     final requestCache = CacheUtil.getRequestCache(cacheKey);
     final requestUrl = '/verses/by_page/$pageNo';
     final List<Verse> verses;
+    Map<String, dynamic> queryParameters = {
+      'words': true,
+      'word_fields': 'text_uthmani',
+      'fields': 'text_uthmani',
+    };
 
     try {
       if (requestCache == null) {
-        final response = await dio.get(requestUrl);
+        final response = await dio.get(
+          requestUrl,
+          queryParameters: queryParameters,
+        );
 
         if (response.statusCode != 200 || response.data == null) {
           return Future.error(response.statusMessage ?? errMsg);
