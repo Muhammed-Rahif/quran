@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 
 class ApiConstants {
@@ -9,17 +7,6 @@ class ApiConstants {
     final dio = Dio(BaseOptions(baseUrl: baseUrl));
 
     return dio;
-  }
-
-  static Directory get cacheDir {
-    final String cacheDirPath = '${Directory.systemTemp.path}/quran-app-cache';
-    final Directory cacheDir = Directory(cacheDirPath);
-
-    if (!cacheDir.existsSync()) {
-      cacheDir.createSync();
-    }
-
-    return cacheDir;
   }
 }
 
