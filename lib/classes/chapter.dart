@@ -30,6 +30,35 @@ class GetAllChaptersResponse {
       };
 }
 
+class GetChapterResponse {
+  final Chapter chapter;
+
+  GetChapterResponse({
+    required this.chapter,
+  });
+
+  GetChapterResponse copyWith({
+    Chapter? chapter,
+  }) =>
+      GetChapterResponse(
+        chapter: chapter ?? this.chapter,
+      );
+
+  factory GetChapterResponse.fromRawJson(String str) =>
+      GetChapterResponse.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory GetChapterResponse.fromJson(Map<String, dynamic> json) =>
+      GetChapterResponse(
+        chapter: Chapter.fromJson(json["chapter"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "chapter": chapter.toJson(),
+      };
+}
+
 class Chapter {
   final int id;
   final RevelationPlace revelationPlace;

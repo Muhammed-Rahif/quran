@@ -4,13 +4,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 class CacheUtil {
-  /// Returns the name of the function as a string.
-  static String _functionToString(Function fn) =>
-      fn.toString().split('\'')[1].trim();
-
   /// Returns the cache file for the given request. If web, returns null.
-  static String? getRequestCache(Function request) {
-    final cacheKey = _functionToString(request);
+  static String? getRequestCache(String cacheKey) {
     final cacheFile = kIsWeb ? null : File('${cacheDir.path}/$cacheKey.json');
 
     if (cacheFile != null && cacheFile.existsSync()) {
@@ -21,10 +16,9 @@ class CacheUtil {
   }
 
   /// Cache the request data. This doesn't work on web. The cache
-  /// will stored on temp directory on the [request] function's name
-  /// as file name.
-  static void cacheRequest(Function request, Map data) {
-    final cacheKey = _functionToString(request);
+  /// will stored in the system's temporary directory as the cache key
+  /// to be the file name.
+  static void cacheRequest(String cacheKey, Map data) {
     final cacheFile = kIsWeb ? null : File('${cacheDir.path}/$cacheKey.json');
 
     if (cacheFile != null) {

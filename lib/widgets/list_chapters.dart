@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:quran/classes/chapter.dart';
-import 'package:quran/providers/chapter_provider.dart';
+import 'package:quran/providers/chapters_provider.dart';
 import 'package:quran/screens/chapter_screen.dart';
 
 class ListChapters extends StatefulWidget {
@@ -21,7 +21,7 @@ class ListChapters extends StatefulWidget {
 }
 
 class _ListChaptersState extends State<ListChapters> {
-  Future allChaptersFuture = ChapterProvider.getAllChapters();
+  Future allChaptersFuture = ChaptersProvider.getAllChapters();
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _ListChaptersState extends State<ListChapters> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      allChaptersFuture = ChapterProvider.getAllChapters();
+                      allChaptersFuture = ChaptersProvider.getAllChapters();
                     });
                   },
                   child: const Text('Retry'),
