@@ -82,7 +82,6 @@ class StandardPrimaryNavigation extends StatelessWidget {
               ),
             ],
             bottom: const TabBar(
-              splashFactory: NoSplash.splashFactory,
               indicatorColor: AppColors.primaryColor,
               tabs: <Widget>[
                 Tab(text: 'Surahs'),

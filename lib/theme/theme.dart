@@ -13,6 +13,8 @@ class AppTheme {
         (states) => AppColors.primaryColor.withOpacity(.8));
 
     return ThemeData(
+      splashFactory: NoSplash.splashFactory,
+      iconTheme: const IconThemeData(color: AppColors.backgroundColor),
       appBarTheme: const AppBarTheme(
         elevation: 0,
         color: AppColors.primaryColor,

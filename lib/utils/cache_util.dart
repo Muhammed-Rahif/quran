@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CacheUtil {
-  /// Returns the cache file for the given request. If web, returns null.
-  static String? getRequestCache(String cacheKey) {
-    final cacheFile = kIsWeb ? null : File('${cacheDir.path}/$cacheKey.json');
+  /// Returns the cache file for the given key. If web, returns null.
+  static Future<String?> getCache(String cacheKey) async {
+    final cacheFile =
+        kIsWeb ? null : File('${(await cacheDir).path}/$cacheKey.json');
 
     if (cacheFile != null && cacheFile.existsSync()) {
       return cacheFile.readAsStringSync();
@@ -15,21 +17,21 @@ class CacheUtil {
     return null;
   }
 
-  /// Cache the request data. This doesn't work on web. The cache
-  /// will stored in the system's temporary directory as the cache key
-  /// to be the file name.
-  static void cacheRequest(String cacheKey, Map data) {
-    final cacheFile = kIsWeb ? null : File('${cacheDir.path}/$cacheKey.json');
+  /// Cache the passed data. This doesn't work on web. The cache
+  /// will stored in the system's external storage directory
+  /// as the cache key to be the file name.
+  static void setCache(String cacheKey, Map data) async {
+    final cacheFile =
+        kIsWeb ? null : File('${(await cacheDir).path}/$cacheKey.json');
 
     if (cacheFile != null) {
       cacheFile.writeAsStringSync(jsonEncode(data));
     }
   }
 
-  static Directory get cacheDir {
-    final String cacheDirPath = '${Directory.systemTemp.path}/quran-app-cache';
-    final Directory cacheDir = Directory(cacheDirPath);
-
+  static Future<Directory> get cacheDir async {
+    final Directory docsDir = await getApplicationDocumentsDirectory();
+    final Directory cacheDir = Directory('${docsDir.path}/quran-app-cache');
     if (!cacheDir.existsSync()) {
       cacheDir.createSync();
     }

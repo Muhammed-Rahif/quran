@@ -8,13 +8,13 @@ class QuranProvider {
   static Future<List<Verse>> getUthmaniScriptQuranByPage(int pageNo) async {
     final errMsg = 'Failed to get uthmani script quran for page $pageNo.';
     final cacheKey = 'uthmani-script-quran-page-$pageNo';
-    final requestCache = CacheUtil.getRequestCache(cacheKey);
+    final cache = await CacheUtil.getCache(cacheKey);
     const requestUrl = '/quran/verses/uthmani';
     Map<String, dynamic> queryParameters = {'page_number': pageNo};
     final List<Verse> verses;
 
     try {
-      if (requestCache == null) {
+      if (cache == null) {
         final response = await dio.get(
           requestUrl,
           queryParameters: queryParameters,
@@ -25,11 +25,11 @@ class QuranProvider {
         }
 
         /// Cache the current request for future use.
-        CacheUtil.cacheRequest(cacheKey, response.data);
+        CacheUtil.setCache(cacheKey, response.data);
 
         verses = GetUthmaniScriptQuranResponse.fromJson(response.data).verses;
       } else {
-        verses = GetUthmaniScriptQuranResponse.fromRawJson(requestCache).verses;
+        verses = GetUthmaniScriptQuranResponse.fromRawJson(cache).verses;
       }
 
       return verses;

@@ -8,7 +8,7 @@ class VersesProvider {
   static Future<List<Verse>> getVersesByPage(int pageNo) async {
     final errMsg = 'Failed to get verses for page $pageNo.';
     final cacheKey = 'verses-page-$pageNo';
-    final requestCache = CacheUtil.getRequestCache(cacheKey);
+    final cache = await CacheUtil.getCache(cacheKey);
     final requestUrl = '/verses/by_page/$pageNo';
     final List<Verse> verses;
     Map<String, dynamic> queryParameters = {
@@ -18,7 +18,7 @@ class VersesProvider {
     };
 
     try {
-      if (requestCache == null) {
+      if (cache == null) {
         final response = await dio.get(
           requestUrl,
           queryParameters: queryParameters,
@@ -29,11 +29,11 @@ class VersesProvider {
         }
 
         /// Cache the current request for future use.
-        CacheUtil.cacheRequest(cacheKey, response.data);
+        CacheUtil.setCache(cacheKey, response.data);
 
         verses = GetVersesResponse.fromJson(response.data).verses;
       } else {
-        verses = GetVersesResponse.fromRawJson(requestCache).verses;
+        verses = GetVersesResponse.fromRawJson(cache).verses;
       }
 
       return verses;

@@ -23,6 +23,7 @@ class ChapterScreen extends StatefulWidget {
 class _ChapterScreenState extends State<ChapterScreen> {
   late Future chaptersByIdFuture =
       ChaptersProvider.getChaptersById(widget.chapter.id);
+  CarouselController carouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +71,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
           return Column(
             children: [
               CarouselSlider(
+                carouselController: carouselController,
                 options: CarouselOptions(
                   reverse: true,
                   enableInfiniteScroll: false,
@@ -87,6 +89,24 @@ class _ChapterScreenState extends State<ChapterScreen> {
                     });
                   },
                 ).toList(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton.filled(
+                    onPressed: () => carouselController.nextPage(
+                      curve: Curves.fastOutSlowIn,
+                    ),
+                    icon: const Icon(Icons.chevron_left_rounded),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton.filled(
+                    onPressed: () => carouselController.previousPage(
+                      curve: Curves.fastOutSlowIn,
+                    ),
+                    icon: const Icon(Icons.chevron_right_rounded),
+                  ),
+                ],
               ),
             ],
           );

@@ -8,12 +8,12 @@ class ChaptersProvider {
   static Future<List<Chapter>> getAllChapters() async {
     const errMsg = 'Failed to get chapters.';
     const cacheKey = 'all-chapters';
-    final requestCache = CacheUtil.getRequestCache(cacheKey);
+    final cache = await CacheUtil.getCache(cacheKey);
     const requestUrl = '/chapters';
     final List<Chapter> chapters;
 
     try {
-      if (requestCache == null) {
+      if (cache == null) {
         final response = await dio.get(requestUrl);
 
         if (response.statusCode != 200 || response.data == null) {
@@ -21,11 +21,11 @@ class ChaptersProvider {
         }
 
         /// Cache the current request for future use.
-        CacheUtil.cacheRequest(cacheKey, response.data);
+        CacheUtil.setCache(cacheKey, response.data);
 
         chapters = GetAllChaptersResponse.fromJson(response.data).chapters;
       } else {
-        chapters = GetAllChaptersResponse.fromRawJson(requestCache).chapters;
+        chapters = GetAllChaptersResponse.fromRawJson(cache).chapters;
       }
 
       return chapters;
@@ -42,12 +42,12 @@ class ChaptersProvider {
   static Future<Chapter> getChaptersById(int chapterId) async {
     final errMsg = 'Failed to get chapter $chapterId.';
     final cacheKey = 'chapter-$chapterId';
-    final requestCache = CacheUtil.getRequestCache(cacheKey);
+    final cache = await CacheUtil.getCache(cacheKey);
     final requestUrl = '/chapters/$chapterId';
     final Chapter chapter;
 
     try {
-      if (requestCache == null) {
+      if (cache == null) {
         final response = await dio.get(requestUrl);
 
         if (response.statusCode != 200 || response.data == null) {
@@ -55,11 +55,11 @@ class ChaptersProvider {
         }
 
         /// Cache the current request for future use.
-        CacheUtil.cacheRequest(cacheKey, response.data);
+        CacheUtil.setCache(cacheKey, response.data);
 
         chapter = GetChapterResponse.fromJson(response.data).chapter;
       } else {
-        chapter = GetChapterResponse.fromRawJson(requestCache).chapter;
+        chapter = GetChapterResponse.fromRawJson(cache).chapter;
       }
 
       return chapter;

@@ -12,6 +12,9 @@ dependencies:
   flutter_adaptive_scaffold: ^0.1.8
   carousel_slider: ^4.2.1
   dio: ^5.4.1
+  path_provider: ^2.1.2
+  google_fonts: ^6.2.1
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -32,3 +35,6 @@ flutter:
     - family: Uthmanic Script
       fonts:
         - asset: assets/fonts/Uthmanic-Script-HAFS-Regular.otf
+    - family: Kitab Regular
+      fonts:
+        - asset: assets/fonts/Kitab-Regular.ttf

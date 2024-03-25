@@ -23,7 +23,6 @@ class LastReadCard extends StatelessWidget {
         child: SingleChildScrollView(
           child: InkWell(
             borderRadius: BorderRadius.circular(10),
-            splashFactory: NoSplash.splashFactory,
             onTap: () {
               Navigator.of(context).popUntil((route) => route.isFirst);
             },
