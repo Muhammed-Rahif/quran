@@ -1,0 +1,123 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main # Update this to your main branch name
+
+jobs:
+  build_android:
+    name: Build and Release for Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.4" # Update to your Flutter version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK for Android
+        run: |
+          flutter build apk
+          ls -R build/app/outputs/flutter-apk  # Print APK file paths
+
+      # Add steps for releasing to Play Store or other platforms
+
+  build_ios:
+    name: Build and Release for iOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.4" # Update to your Flutter version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS app
+        run: |
+          flutter build ios --release --no-codesign
+          ls -R build/ios/iphoneos  # Print iOS app file paths
+
+      # Add steps for releasing to App Store or other platforms
+
+  build_web:
+    name: Build and Release for Web
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.4" # Update to your Flutter version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build web app
+        run: |
+          flutter build web
+          ls -R build/web  # Print web app file paths
+
+      # Add steps for deploying to hosting platforms
+
+  build_windows:
+    name: Build and Release for Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.4" # Update to your Flutter version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Package Windows app
+        run: |
+          flutter build windows
+          ls -R build/windows  # Print Windows app file paths
+
+      # Add steps for creating installers or releasing to other platforms
+
+  build_macos:
+    name: Build and Release for macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.4" # Update to your Flutter version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Package macOS app
+        run: |
+          flutter build macos
+          ls -R build/macos  # Print macOS app file paths
+
+      # Add steps for releasing to the App Store or other platforms

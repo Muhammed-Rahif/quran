@@ -90,24 +90,24 @@ class _ChapterScreenState extends State<ChapterScreen> {
                   },
                 ).toList(),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton.filled(
-                    onPressed: () => carouselController.nextPage(
-                      curve: Curves.fastOutSlowIn,
-                    ),
-                    icon: const Icon(Icons.chevron_left_rounded),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton.filled(
-                    onPressed: () => carouselController.previousPage(
-                      curve: Curves.fastOutSlowIn,
-                    ),
-                    icon: const Icon(Icons.chevron_right_rounded),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     IconButton.filled(
+              //       onPressed: () => carouselController.nextPage(
+              //         curve: Curves.fastOutSlowIn,
+              //       ),
+              //       icon: const Icon(Icons.chevron_left_rounded),
+              //     ),
+              //     const SizedBox(width: 8),
+              //     IconButton.filled(
+              //       onPressed: () => carouselController.previousPage(
+              //         curve: Curves.fastOutSlowIn,
+              //       ),
+              //       icon: const Icon(Icons.chevron_right_rounded),
+              //     ),
+              //   ],
+              // ),
             ],
           );
         },

@@ -82,6 +82,8 @@ class _QuranPageState extends State<QuranPage> {
                 // ),
                 // );
 
+                // TODO: Fix home tab bar reloading
+
                 return AutoSizeText(
                   pageText,
                   maxLines: 15,
@@ -95,6 +97,8 @@ class _QuranPageState extends State<QuranPage> {
                     fontFamily: 'Kitab Regular',
                     locale: Locale('ar'),
                     height: 1.7,
+                    color: Colors.black,
+                    backgroundColor: Colors.white,
                   ),
                 );
               },
