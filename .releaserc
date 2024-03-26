@@ -1,0 +1,50 @@
+{
+  "branches": [
+    "main",
+    {
+      "name": "beta",
+      "prerelease": true
+    }
+  ],
+  "repository": "https://github.com/Muhammed-Rahif/quran",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "release-assets/app-release.apk",
+            "label": "universal-app-release-v${nextRelease.version}.apk",
+            "name": "universal-app-release-v${nextRelease.version}.apk"
+          },
+          {
+            "path": "CHANGELOG.md",
+            "label": "CHANGELOG-${nextRelease.version}.md",
+            "name": "CHANGELOG-${nextRelease.version}.md"
+          }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "verifyReleaseCmd": "dart scripts/versioning.dart -v ${nextRelease.version}"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md",
+          "pubspec.yaml",
+          "android/app/build.gradle",
+          "ios/App/App.xcodeproj/project.pbxproj"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ]
+  ]
+}

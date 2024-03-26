@@ -1,0 +1,226 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - beta
+      - main
+
+jobs:
+  build_android:
+    name: Build and Upload Artifact for Android
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.4"
+
+      - name: Setup node environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: "21"
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Install semantic-release modules
+        run: |
+          npm i @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/changelog @semantic-release/github @semantic-release/exec @semantic-release/git
+      - name: Semantic Release
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          npx semantic-release@23 -d # dry run for updating pubspec.yml version property
+
+      - name: Build APK for Android
+        run: |
+          flutter build apk
+          ls -R build/app/outputs/flutter-apk
+
+      - name: Upload APK to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  release:
+    name: Semantic Release
+    needs: build_android # [build_android, build_ios, build_web, build_windows, build_macos]
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup java 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "11"
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.4"
+          channel: "stable"
+      - run: flutter pub get
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          pattern: release-*
+          merge-multiple: true
+      - run: ls -R release-assets
+      - name: Setup node environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: "21"
+      - name: Install semantic-release modules
+        run: |
+          npm i @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/changelog @semantic-release/github @semantic-release/exec @semantic-release/git
+      - name: Semantic Release
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          npx semantic-release@23
+
+  # build_ios:
+  #   name: Build and Release for iOS
+  #   runs-on: macos-latest
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: "2.x" # Update to your Flutter version
+
+  #     - name: Install dependencies
+  #       run: flutter pub get
+
+  #     - name: Build iOS app
+  #       run: |
+  #         flutter build ios --release --no-codesign
+  #         ls -R build/ios/iphoneos  # Print iOS app file paths
+
+  #     - name: Zip and upload output files to release
+  #       run: |
+  #         mkdir -p release
+  #         zip -r output.zip build/ios/iphoneos
+  #       uses: svenstaro/upload-release-action@v2
+  #       with:
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #         file: output.zip
+  #         asset_name: ios_output.zip
+  #         tag: ${{ github.ref }}
+  #         overwrite: true
+  #         body: "Uploaded iOS output files for this release"
+
+  # build_web:
+  #   name: Build and Release for Web
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: "2.x" # Update to your Flutter version
+
+  #     - name: Install dependencies
+  #       run: flutter pub get
+
+  #     - name: Build web app
+  #       run: |
+  #         flutter build web
+  #         ls -R build/web  # Print web app file paths
+
+  #     - name: Zip and upload output files to release
+  #       run: |
+  #         mkdir -p release
+  #         zip -r output.zip build/web
+  #       uses: svenstaro/upload-release-action@v2
+  #       with:
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #         file: output.zip
+  #         asset_name: web_output.zip
+  #         tag: ${{ github.ref }}
+  #         overwrite: true
+  #         body: "Uploaded web output files for this release"
+
+  # build_windows:
+  #   name: Build and Release for Windows
+  #   runs-on: windows-latest
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: "2.x" # Update to your Flutter version
+
+  #     - name: Install dependencies
+  #       run: flutter pub get
+
+  #     - name: Package Windows app
+  #       run: |
+  #         flutter build windows
+  #         ls -R build/windows  # Print Windows app file paths
+
+  #     - name: Zip and upload output files to release
+  #       run: |
+  #         mkdir -p release
+  #         zip -r output.zip build/windows
+  #       uses: svenstaro/upload-release-action@v2
+  #       with:
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #         file: output.zip
+  #         asset_name: windows_output.zip
+  #         tag: ${{ github.ref }}
+  #         overwrite: true
+  #         body: "Uploaded Windows output files for this release"
+
+  # build_macos:
+  #   name: Build and Release for macOS
+  #   runs-on: macos-latest
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: "2.x" # Update to your Flutter version
+
+  #     - name: Install dependencies
+  #       run: flutter pub get
+
+  #     - name: Package macOS app
+  #       run: |
+  #         flutter build macos
+  #         ls -R build/macos  # Print macOS app file paths
+
+  #     - name: Zip and upload output files to release
+  #       run: |
+  #         mkdir -p release
+  #         zip -r output.zip build/macos
+  #       uses: svenstaro/upload-release-action@v2
+  #       with:
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #         file: output.zip
+  #         asset_name: macos_output.zip
+  #         tag: ${{ github.ref }}
+  #         overwrite: true
+  #         body: "Uploaded macOS output files for this release"
