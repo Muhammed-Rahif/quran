@@ -42,15 +42,55 @@ jobs:
           flutter build apk
           ls -R build/app/outputs/flutter-apk
 
-      - name: Upload APK to artifacts
+      - name: Upload APK Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
+  build_windows:
+    name: Build and Upload Artifact for Windows
+    runs-on: windows-latest
+    permissions: write-all
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.4"
+
+      - name: Setup node environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: "21"
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Install semantic-release modules
+        run: |
+          npm i @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/changelog @semantic-release/github @semantic-release/exec @semantic-release/git
+      - name: Semantic Release
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          npx semantic-release@23 -d # dry run for updating pubspec.yml version property
+
+      - name: Build MSIX for Windows
+        run: |
+          dart run msix:create
+          ls -R build/windows
+
+      - name: Upload APK Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-windows
+          path: build/windows/Quran.msix
+
   release:
     name: Semantic Release
-    needs: build_android # [build_android, build_ios, build_web, build_windows, build_macos]
+    needs: [build_android, build_windows] # [build_android, build_ios, build_web, build_windows, build_macos]
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -156,40 +196,6 @@ jobs:
   #         tag: ${{ github.ref }}
   #         overwrite: true
   #         body: "Uploaded web output files for this release"
-
-  # build_windows:
-  #   name: Build and Release for Windows
-  #   runs-on: windows-latest
-
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
-
-  #     - name: Setup Flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: "2.x" # Update to your Flutter version
-
-  #     - name: Install dependencies
-  #       run: flutter pub get
-
-  #     - name: Package Windows app
-  #       run: |
-  #         flutter build windows
-  #         ls -R build/windows  # Print Windows app file paths
-
-  #     - name: Zip and upload output files to release
-  #       run: |
-  #         mkdir -p release
-  #         zip -r output.zip build/windows
-  #       uses: svenstaro/upload-release-action@v2
-  #       with:
-  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
-  #         file: output.zip
-  #         asset_name: windows_output.zip
-  #         tag: ${{ github.ref }}
-  #         overwrite: true
-  #         body: "Uploaded Windows output files for this release"
 
   # build_macos:
   #   name: Build and Release for macOS

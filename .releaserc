@@ -17,13 +17,18 @@
         "assets": [
           {
             "path": "release-assets/app-release.apk",
-            "label": "universal-app-release-v${nextRelease.version}.apk",
-            "name": "universal-app-release-v${nextRelease.version}.apk"
+            "label": "quran-universal-apk-v${nextRelease.version}.apk",
+            "name": "quran-universal-apk-v${nextRelease.version}.apk"
           },
           {
             "path": "CHANGELOG.md",
             "label": "CHANGELOG-${nextRelease.version}.md",
             "name": "CHANGELOG-${nextRelease.version}.md"
+          },
+          {
+            "path": "release-assets/Quran.msix",
+            "label": "quran-x64-v${nextRelease.version}.msix",
+            "name": "quran-x64-v${nextRelease.version}.msix"
           }
         ]
       }

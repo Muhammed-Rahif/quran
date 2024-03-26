@@ -14,7 +14,7 @@ void main(List<String> arguments) async {
   final pubspecFile = File('pubspec.yaml');
   final versionRegex = RegExp(r'version: \d+\.\d+\.\d+.+');
 
-  /// Example: 'version: 1.0.0-beta.13+1'
+  /// Example: version: 1.0.0-beta.13+1
   final currentVersion = versionRegex
       .allMatches(pubspecFile.readAsStringSync())
       .map((m) => m.group(0))
@@ -28,9 +28,19 @@ void main(List<String> arguments) async {
 
   /// Example:  1.0.0-beta.14+2
   final newVersion = '$upcomingVersionName+${currntVersionCode + 1}';
-  final updatedPubspecFile = (await pubspecFile.readAsString()).replaceFirst(
+  String updatedPubspecFile = (await pubspecFile.readAsString()).replaceFirst(
     RegExp(r'version: \d+\.\d+\.\d+.+'),
     'version: $newVersion',
+  );
+
+  /// Example:  msix_version: 1.0.0.14
+  final newMsiVersion = RegExp(r'\d+')
+      .allMatches(upcomingVersionName)
+      .map((m) => m.group(0))
+      .join('.');
+  updatedPubspecFile = updatedPubspecFile.replaceFirst(
+    RegExp(r'msix_version: \d+\.\d+\.\d+.+'),
+    'msix_version: $newMsiVersion',
   );
 
   await pubspecFile.writeAsString(updatedPubspecFile);
