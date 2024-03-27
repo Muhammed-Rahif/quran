@@ -81,7 +81,8 @@ class LastReadCard extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              IconButton.filled(
+                              IconButton(
+                                tooltip: 'Continue Reading',
                                 onPressed: () {},
                                 icon: const Icon(
                                   Icons.keyboard_double_arrow_right_rounded,
