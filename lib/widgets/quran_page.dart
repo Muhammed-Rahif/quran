@@ -50,58 +50,50 @@ class _QuranPageState extends State<QuranPage> {
                 NumberUtil.getArabicNumber(verse.verseNumber, isAyahEnd: true))
             .join('');
 
-        return SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 180),
-            width: double.infinity,
-            child: Builder(
-              builder: (context) {
-                // final pageText = List.generate(
-                //   15,
-                //   (index) {
-                //     final lineWords = allWords
-                //         .where((word) => word.lineNumber == index + 1)
-                //         .toList();
-                //     final lineStr =
-                //         '${lineWords.map((word) => word.textUthmani).join(' ')}\n';
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+          // width: double.infinity,
+          // final pageText = List.generate(
+          //   15,
+          //   (index) {
+          //     final lineWords = allWords
+          //         .where((word) => word.lineNumber == index + 1)
+          //         .toList();
+          //     final lineStr =
+          //         '${lineWords.map((word) => word.textUthmani).join(' ')}\n';
 
-                //     return lineStr;
-                //   },
-                // ).join();
+          //     return lineStr;
+          //   },
+          // ).join();
 
-                // return SelectableText(
-                // pageText,
-                // textAlign: TextAlign.justify,
-                // textDirection: TextDirection.rtl,
-                // style: const TextStyle(
-                //   fontSize: 30,
-                //   fontWeight: FontWeight.w500,
-                //   fontFamily: 'Kitab Regular',
-                //   locale: Locale('ar'),
-                //   height: 1.5,
-                // ),
-                // );
+          // return SelectableText(
+          // pageText,
+          // textAlign: TextAlign.justify,
+          // textDirection: TextDirection.rtl,
+          // style: const TextStyle(
+          //   fontSize: 30,
+          //   fontWeight: FontWeight.w500,
+          //   fontFamily: 'Kitab Regular',
+          //   locale: Locale('ar'),
+          //   height: 1.5,
+          // ),
+          // );
 
-                // TODO: Fix home tab bar reloading
-
-                return AutoSizeText(
-                  pageText,
-                  maxLines: 15,
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  maxFontSize: 26,
-                  minFontSize: 24,
-                  locale: const Locale('ar'),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Kitab Regular',
-                    locale: Locale('ar'),
-                    height: 1.7,
-                    color: Colors.black,
-                    backgroundColor: Colors.white,
-                  ),
-                );
-              },
+          // TODO: Fix home tab bar reloading
+          child: AutoSizeText(
+            pageText,
+            maxLines: 15,
+            textAlign: TextAlign.justify,
+            textDirection: TextDirection.rtl,
+            maxFontSize: 26,
+            minFontSize: 22,
+            locale: const Locale('ar'),
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontFamily: 'Kitab Regular',
+              locale: Locale('ar'),
+              height: 1.7,
+              color: Colors.white,
             ),
           ),
         );

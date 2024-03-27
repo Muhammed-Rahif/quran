@@ -43,9 +43,11 @@ class _ChapterScreenState extends State<ChapterScreen> {
               () => Navigator.of(context).popUntil((route) => route.isFirst),
           icon: const Icon(Icons.arrow_back_ios_rounded),
         ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
+        shape: Breakpoints.mediumAndUp.isActive(context)
+            ? const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              )
+            : null,
       ),
       body: FutureBuilder(
         future: chaptersByIdFuture,
@@ -77,8 +79,14 @@ class _ChapterScreenState extends State<ChapterScreen> {
                   enableInfiniteScroll: false,
                   initialPage: chapter.pages.first - 1,
                   enlargeCenterPage: false,
-                  height: MediaQuery.of(context).size.height - 108,
-                  viewportFraction: 1,
+                  // aspectRatio: Breakpoints.mediumAndUp.isActive(context)
+                  //     ? 16 / 9
+                  //     : 9 / 16,
+                  height: Breakpoints.mediumAndUp.isActive(context)
+                      ? MediaQuery.of(context).size.height * 0.8
+                      : MediaQuery.of(context).size.height * 1,
+                  viewportFraction:
+                      Breakpoints.mediumAndUp.isActive(context) ? 0.5 : 1,
                 ),
                 items: List.generate(604, (indx) => indx).map(
                   (indx) {
