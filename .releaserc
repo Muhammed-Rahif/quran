@@ -17,18 +17,18 @@
         "assets": [
           {
             "path": "release-assets/app-release.apk",
-            "label": "quran-universal-apk-v${nextRelease.version}.apk",
-            "name": "quran-universal-apk-v${nextRelease.version}.apk"
+            "label": "quran-v${nextRelease.version}.apk",
+            "name": "quran-v${nextRelease.version}.apk"
           },
           {
-            "path": "CHANGELOG.md",
-            "label": "CHANGELOG-${nextRelease.version}.md",
-            "name": "CHANGELOG-${nextRelease.version}.md"
+            "path": "release-assets/Quran.zip",
+            "label": "quran-v${nextRelease.version}-windows-x86-64.zip",
+            "name": "quran-v${nextRelease.version}-windows-x86-64.zip"
           },
           {
-            "path": "release-assets/Quran.msix",
-            "label": "quran-x64-v${nextRelease.version}.msix",
-            "name": "quran-x64-v${nextRelease.version}.msix"
+            "path": "release-assets/release-linux-x86.deb",
+            "label": "quran-v${nextRelease.version}-linux-x86-64.deb",
+            "name": "quran-v${nextRelease.version}-linux-x86-64.deb"
           }
         ]
       }

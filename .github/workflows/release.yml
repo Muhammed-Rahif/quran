@@ -1,32 +1,31 @@
 name: Release
-
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - beta
-      - main
+  # push:
+  #   branches:
+  #     - beta
+  #     - main
+env:
+  FLUTTER_VERSION: "3.19.4"
 
 jobs:
-  build_android:
-    name: Build and Upload Artifact for Android
+  build_apk:
+    name: Build and Upload Artifact APK
     runs-on: ubuntu-latest
     permissions: write-all
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.19.4"
-
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
       - name: Setup node environment
         uses: actions/setup-node@v3
         with:
           node-version: "21"
-      - name: Install dependencies
+      - name: Install flutter dependencies
         run: flutter pub get
       - name: Install semantic-release modules
         run: |
@@ -36,77 +35,117 @@ jobs:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
           npx semantic-release@23 -d # dry run for updating pubspec.yml version property
-
       - name: Build APK for Android
         run: |
           flutter build apk
           ls -R build/app/outputs/flutter-apk
-
       - name: Upload APK Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
-  build_windows:
-    name: Build and Upload Artifact for Windows
+  build_windows_zip:
+    name: Build and Upload Artifact for Windows Zip
     runs-on: windows-latest
-    permissions: write-all
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.19.4"
-
-      - name: Setup node environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: "21"
-      - name: Install dependencies
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+      - name: Install flutter dependencies
         run: flutter pub get
-      - name: Install semantic-release modules
+      - name: Build for Windows
         run: |
-          npm i @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/changelog @semantic-release/github @semantic-release/exec @semantic-release/git
-      - name: Semantic Release
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        run: |
-          npx semantic-release@23 -d # dry run for updating pubspec.yml version property
-
-      - name: Build MSIX for Windows
-        run: |
-          dart run msix:create
-          ls -R build/windows
-
+          flutter build windows
+          ls -R build/windows/x64/runner/Release
+      - name: Zip compiled files
+        run: Compress-Archive -Path build/windows/x64/runner/Release* -DestinationPath Quran.zip
       - name: Upload APK Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: build/windows/Quran.msix
+          path: Quran.zip
+
+  build_deb_x86_64:
+    name: Build and Upload Artifact for Linux Deb x86_64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake libgtk-3-dev ninja-build libayatana-appindicator3-dev
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+      - name: Install flutter dependencies
+        run: flutter pub get
+      - name: Enable dart_distributor
+        run: dart pub global activate flutter_distributor
+      - name: Update PATH
+        run: echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> ~/.bashrc
+      - name: Build deb package
+        run: |
+          flutter_distributor package --platform linux --targets deb
+          mv dist/**/*.deb dist/release-linux-x86.deb
+      - name: Upload APK Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-linux-x86
+          path: dist/release-linux-x86.deb
+
+  # # Manage the Flutter version on the self-hosted runner manually!
+  # # Flutter currently doesn't provide Linux ARM64 binaries.
+  # build_deb_arm_64:
+  #   name: Build and Upload Artifact for Linux Deb ARM 64
+  #   runs-on: [self-hosted, linux, arm64]
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+  #     - name: Install dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -y clang cmake libgtk-3-dev ninja-build libayatana-appindicator3-dev
+  #     - name: Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: ${{ env.FLUTTER_VERSION }}
+  #         channel: "stable"
+  #     - name: Install flutter dependencies
+  #       run: flutter pub get
+  #     - name: Enable dart_distributor
+  #       run: dart pub global activate flutter_distributor
+  #     - name: Update PATH
+  #       run: echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> ~/.bashrc
+  #     - name: Build deb package
+  #       run: |
+  #         flutter_distributor package --platform linux --targets deb
+  #         mv dist/**/*.deb dist/release-linux-arm-64.deb
+  #     - name: Upload APK Artifacts
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: release-linux-arm-64
+  #         path: dist/release-linux-arm-64.deb
 
   release:
     name: Semantic Release
-    needs: [build_android, build_windows] # [build_android, build_ios, build_web, build_windows, build_macos]
+    needs: [build_apk, build_windows_zip, build_deb_x86_64] # build_deb_arm_64
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup java 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: "zulu"
-          java-version: "11"
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.19.4"
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
       - run: flutter pub get
       - name: Download Artifacts
@@ -132,7 +171,6 @@ jobs:
   # build_ios:
   #   name: Build and Release for iOS
   #   runs-on: macos-latest
-
   #   steps:
   #     - name: Checkout code
   #       uses: actions/checkout@v3
@@ -142,7 +180,7 @@ jobs:
   #       with:
   #         flutter-version: "2.x" # Update to your Flutter version
 
-  #     - name: Install dependencies
+  #     - name flutter: Install dependencies
   #       run: flutter pub get
 
   #     - name: Build iOS app
@@ -166,7 +204,6 @@ jobs:
   # build_web:
   #   name: Build and Release for Web
   #   runs-on: ubuntu-latest
-
   #   steps:
   #     - name: Checkout code
   #       uses: actions/checkout@v3
@@ -176,7 +213,7 @@ jobs:
   #       with:
   #         flutter-version: "2.x" # Update to your Flutter version
 
-  #     - name: Install dependencies
+  #     - name flutter: Install dependencies
   #       run: flutter pub get
 
   #     - name: Build web app
@@ -200,7 +237,6 @@ jobs:
   # build_macos:
   #   name: Build and Release for macOS
   #   runs-on: macos-latest
-
   #   steps:
   #     - name: Checkout code
   #       uses: actions/checkout@v3
@@ -210,7 +246,7 @@ jobs:
   #       with:
   #         flutter-version: "2.x" # Update to your Flutter version
 
-  #     - name: Install dependencies
+  #     - name flutter: Install dependencies
   #       run: flutter pub get
 
   #     - name: Package macOS app

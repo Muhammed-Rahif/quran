@@ -1,0 +1,41 @@
+display_name: Quran
+package_name: quran
+maintainer:
+  name: Muhammed Rahif
+  email: rahifpalliyalil@gmail.com
+# co_authors:
+#   - name:
+#     email:
+priority: optional
+section: x11
+installed_size: 6604
+essential: false
+icon: assets/images/quran-logo.png
+
+pre_dependencies:
+  - libc6 (>= 2.31)
+
+dependencies:
+  - libappindicator3-1 | libayatana-appindicator3-1
+  - gir1.2-appindicator3-0.1 | gir1.2-ayatanaappindicator3-0.1
+  - libayatana-ido3-0.4-0
+  - xdg-user-dirs
+
+postinstall_scripts:
+  - echo "Quran is installed successfully!"
+postuninstall_scripts:
+  - echo "Quran is uninstalled successfully!"
+
+keywords:
+  - Quran
+  - Quran app
+  - Islamic
+  - Quranic
+
+generic_name: A cross platform Holy Quran App made with flutter!
+
+categories:
+  - Education
+  - Religion
+
+startup_notify: true
