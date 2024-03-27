@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:quran/classes/chapter.dart';
 import 'package:quran/providers/chapters_provider.dart';
 import 'package:quran/widgets/display_error.dart';
@@ -23,7 +22,8 @@ class ChapterScreen extends StatefulWidget {
 class _ChapterScreenState extends State<ChapterScreen> {
   late Future chaptersByIdFuture =
       ChaptersProvider.getChaptersById(widget.chapter.id);
-  CarouselController carouselController = CarouselController();
+  late PageController pageController = PageController(
+      viewportFraction: Breakpoints.mediumAndUp.isActive(context) ? .5 : 1);
 
   @override
   Widget build(BuildContext context) {
@@ -69,54 +69,21 @@ class _ChapterScreenState extends State<ChapterScreen> {
           }
 
           final chapter = snapshot.data!;
+          // pageController.jumpToPage(chapter.pages.first - 1);
 
-          return Column(
-            children: [
-              CarouselSlider(
-                carouselController: carouselController,
-                options: CarouselOptions(
-                  reverse: true,
-                  enableInfiniteScroll: false,
-                  initialPage: chapter.pages.first - 1,
-                  enlargeCenterPage: false,
-                  // aspectRatio: Breakpoints.mediumAndUp.isActive(context)
-                  //     ? 16 / 9
-                  //     : 9 / 16,
-                  height: Breakpoints.mediumAndUp.isActive(context)
-                      ? MediaQuery.of(context).size.height * 0.8
-                      : MediaQuery.of(context).size.height * 1,
-                  viewportFraction:
-                      Breakpoints.mediumAndUp.isActive(context) ? 0.5 : 1,
-                ),
-                items: List.generate(604, (indx) => indx).map(
-                  (indx) {
-                    /// Builder is used to prevent the page from being built
-                    /// until it is needed.
-                    return Builder(builder: (context) {
-                      return QuranPage(pageNo: indx + 1);
-                    });
-                  },
-                ).toList(),
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     IconButton.filled(
-              //       onPressed: () => carouselController.nextPage(
-              //         curve: Curves.fastOutSlowIn,
-              //       ),
-              //       icon: const Icon(Icons.chevron_left_rounded),
-              //     ),
-              //     const SizedBox(width: 8),
-              //     IconButton.filled(
-              //       onPressed: () => carouselController.previousPage(
-              //         curve: Curves.fastOutSlowIn,
-              //       ),
-              //       icon: const Icon(Icons.chevron_right_rounded),
-              //     ),
-              //   ],
-              // ),
-            ],
+          return GestureDetector(
+            onTap: () {
+              pageController.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.fastOutSlowIn,
+              );
+            },
+            child: PageView.builder(
+              reverse: true,
+              controller: pageController,
+              itemCount: 604,
+              itemBuilder: (context, indx) => QuranPage(pageNo: indx + 1),
+            ),
           );
         },
       ),

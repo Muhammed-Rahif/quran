@@ -52,7 +52,6 @@ class _QuranPageState extends State<QuranPage> {
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-          // width: double.infinity,
           // final pageText = List.generate(
           //   15,
           //   (index) {
@@ -80,20 +79,34 @@ class _QuranPageState extends State<QuranPage> {
           // );
 
           // TODO: Fix home tab bar reloading
-          child: AutoSizeText(
-            pageText,
-            maxLines: 15,
-            textAlign: TextAlign.justify,
-            textDirection: TextDirection.rtl,
-            maxFontSize: 26,
-            minFontSize: 22,
-            locale: const Locale('ar'),
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontFamily: 'Kitab Regular',
-              locale: Locale('ar'),
-              height: 1.7,
-              color: Colors.white,
+          // child: AutoSizeText(
+          //   pageText,
+          //   maxLines: 15,
+          //   textAlign: TextAlign.justify,
+          //   textDirection: TextDirection.rtl,
+          //   maxFontSize: 26,
+          //   minFontSize: 22,
+          //   locale: const Locale('ar'),
+          //   style: const TextStyle(
+          //     fontWeight: FontWeight.w500,
+          //     fontFamily: 'Kitab Regular',
+          //     locale: Locale('ar'),
+          //     height: 1.7,
+          //     color: Colors.white,
+          //   ),
+          // ),
+          child: ColorFiltered(
+            colorFilter: const ColorFilter.matrix(<double>[
+              -1.0, 0.0, 0.0, 0.0, 255.0, //
+              0.0, -1.0, 0.0, 0.0, 255.0, //
+              0.0, 0.0, -1.0, 0.0, 255.0, //
+              0.0, 0.0, 0.0, 1.0, 0.0, //
+            ]),
+            child: Image.network(
+              'https://github.com/Muhammed-Rahif/Quran-App-Data/blob/main/quran_images/${widget.pageNo}.png?raw=true',
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.contain,
             ),
           ),
         );
