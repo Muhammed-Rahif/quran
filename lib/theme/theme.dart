@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   static const Color primaryColor = Color(0xffEDD681);
@@ -13,6 +14,7 @@ class AppTheme {
         (states) => AppColors.primaryColor.withOpacity(.8));
 
     return ThemeData(
+      textTheme: GoogleFonts.ubuntuTextTheme(),
       splashFactory: NoSplash.splashFactory,
       iconTheme: const IconThemeData(color: AppColors.backgroundColor),
       appBarTheme: const AppBarTheme(
