@@ -14,7 +14,7 @@ class AppTheme {
         (states) => AppColors.primaryColor.withOpacity(.8));
 
     return ThemeData(
-      textTheme: GoogleFonts.ubuntuTextTheme(),
+      fontFamily: GoogleFonts.ubuntu().fontFamily,
       splashFactory: NoSplash.splashFactory,
       iconTheme: const IconThemeData(color: AppColors.backgroundColor),
       appBarTheme: const AppBarTheme(

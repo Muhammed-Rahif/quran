@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:quran/classes/verse.dart';
 import 'package:quran/providers/verses_provider.dart';
 import 'package:quran/utils/number_util.dart';
+import 'package:quran/widgets/custom_progress_indicator.dart';
 import 'package:quran/widgets/display_error.dart';
 
 class QuranPage extends StatefulWidget {
@@ -27,7 +28,9 @@ class _QuranPageState extends State<QuranPage> {
       future: versesByPageFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const Center(child: CircularProgressIndicator());
+          return CustomProgressIndicator(
+            text: 'Loading page ${widget.pageNo}...',
+          );
         }
 
         if (snapshot.hasError) {
@@ -43,12 +46,20 @@ class _QuranPageState extends State<QuranPage> {
         }
 
         final verses = snapshot.data!;
-        // final allWords = verses.expand((verse) => verse.words).toList();
-        final pageText = verses
-            .map((verse) =>
-                verse.textUthmani +
-                NumberUtil.getArabicNumber(verse.verseNumber, isAyahEnd: true))
-            .join('');
+
+        final pageText = verses.map((verse) {
+          String str = '';
+
+          if (verse.verseNumber == 1 && verse.pageNumber != 1) {
+            str +=
+                '\n                 ▐░░░░░░░░░░░░░▌ بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ▐░░░░░░░░░░░░░▌\n';
+          }
+
+          str += verse.textUthmani +
+              NumberUtil.getArabicNumber(verse.verseNumber, isAyahEnd: true);
+
+          return str;
+        }).join('');
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10),

@@ -54,8 +54,6 @@ class QuranProvider {
       if (cache == null) {
         final response = await dio.get(requestUrl);
 
-        print(response.requestOptions.uri.toString());
-
         if (response.statusCode != 200 || response.data == null) {
           return Future.error(response.statusMessage ?? errMsg);
         }

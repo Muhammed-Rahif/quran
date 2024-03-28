@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quran/classes/chapter.dart';
 import 'package:quran/constants/app_contants.dart';
 import 'package:quran/widgets/quran_page.dart';
-import 'package:indexed_list_view/indexed_list_view.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ChapterScreen extends StatelessWidget {
   const ChapterScreen({
@@ -16,16 +16,15 @@ class ChapterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ItemScrollController itemScrollController = ItemScrollController();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (AppConstants.breakpoint.isActive(context)) {
         Navigator.of(context).popUntil((route) => route.isFirst);
       }
-    });
 
-    final controller = IndexedScrollController(
-      initialIndex: chapter.pages.first - 1,
-      keepScrollOffset: false,
-    );
+      itemScrollController.jumpTo(index: chapter.pages.first - 1);
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -45,10 +44,9 @@ class ChapterScreen extends StatelessWidget {
               )
             : null,
       ),
-      body: IndexedListView.builder(
-        controller: controller,
-        maxItemCount: 604,
-        minItemCount: 0,
+      body: ScrollablePositionedList.builder(
+        itemScrollController: itemScrollController,
+        itemCount: 604,
         itemBuilder: (context, indx) => QuranPage(pageNo: indx + 1),
       ),
     );

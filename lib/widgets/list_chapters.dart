@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quran/classes/chapter.dart';
 import 'package:quran/providers/chapters_provider.dart';
 import 'package:quran/screens/chapter_screen.dart';
+import 'package:quran/widgets/custom_progress_indicator.dart';
 import 'package:quran/widgets/display_error.dart';
 import 'package:quran/constants/app_contants.dart';
 
@@ -31,7 +32,7 @@ class _ListChaptersState extends State<ListChapters> {
         future: allChaptersFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const CustomProgressIndicator();
           }
 
           if (snapshot.hasError) {

@@ -187,14 +187,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.7"
-  indexed_list_view:
-    dependency: "direct main"
-    description:
-      name: indexed_list_view
-      sha256: "19c080b6505ad3283f9e199f53122d4779159da88a3f9322a2c682aeccae53e0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.2"
   js:
     dependency: transitive
     description:
@@ -355,6 +347,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.4"
+  scrollable_positioned_list:
+    dependency: "direct main"
+    description:
+      name: scrollable_positioned_list
+      sha256: "1b54d5f1329a1e263269abc9e2543d90806131aa14fe7c6062a8054d57249287"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.8"
   sky_engine:
     dependency: transitive
     description: flutter
