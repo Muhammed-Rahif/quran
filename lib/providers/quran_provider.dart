@@ -41,4 +41,41 @@ class QuranProvider {
       return Future.error(err.toString());
     }
   }
+
+  /// Get uathmani script quran full.
+  static Future<List<Verse>> getUthmaniScriptQuranFull() async {
+    const errMsg = 'Failed to get uthmani script quran.';
+    const cacheKey = 'uthmani-script-quran-full';
+    final cache = await CacheUtil.getCache(cacheKey);
+    const requestUrl = '/quran/verses/uthmani';
+    final List<Verse> verses;
+
+    try {
+      if (cache == null) {
+        final response = await dio.get(requestUrl);
+
+        print(response.requestOptions.uri.toString());
+
+        if (response.statusCode != 200 || response.data == null) {
+          return Future.error(response.statusMessage ?? errMsg);
+        }
+
+        /// Cache the current request for future use.
+        CacheUtil.setCache(cacheKey, response.data);
+
+        verses =
+            GetUthmanicScriptQuranFullResponse.fromJson(response.data).verses;
+      } else {
+        verses = GetUthmanicScriptQuranFullResponse.fromRawJson(cache).verses;
+      }
+
+      return verses;
+    } catch (err) {
+      if (err is DioException) {
+        return Future.error(err.message ?? errMsg);
+      }
+
+      return Future.error(err.toString());
+    }
+  }
 }

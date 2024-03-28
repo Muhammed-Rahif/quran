@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:quran/classes/chapter.dart';
+import 'package:quran/constants/app_contants.dart';
 import 'package:quran/screens/chapter_screen.dart';
 import 'package:quran/theme/theme.dart';
 import 'package:quran/widgets/home/surah_tab_bar_view.dart';
@@ -15,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Chapter? chapter;
 
-  void onChapterClick(Chapter chptr) {
+  void selectChapter(Chapter? chptr) {
     setState(() => chapter = chptr);
   }
 
@@ -30,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
               key: const Key('standard_primary_navigation'),
               builder: (context) => StandardPrimaryNavigation(
                 selectedChapter: chapter,
-                onChapterClick: onChapterClick,
+                selectChapter: selectChapter,
               ),
             ),
           },
@@ -38,9 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SlotLayout(
           config: {
             if (chapter != null)
-              Breakpoints.mediumAndUp: SlotLayout.from(
+              AppConstants.breakpoint: SlotLayout.from(
                 key: UniqueKey(),
-                builder: (context) => ChapterScreen(chapter: chapter!),
+                builder: (context) => ChapterScreen(
+                  chapter: chapter!,
+                  onBack: () => selectChapter(null),
+                ),
               ),
           },
         ),
@@ -53,16 +57,16 @@ class StandardPrimaryNavigation extends StatelessWidget {
   const StandardPrimaryNavigation({
     super.key,
     required this.selectedChapter,
-    required this.onChapterClick,
+    required this.selectChapter,
   });
 
   final Chapter? selectedChapter;
-  final void Function(Chapter)? onChapterClick;
+  final void Function(Chapter?)? selectChapter;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: Breakpoints.mediumAndUp.isActive(context) ? 360 : double.infinity,
+      width: AppConstants.breakpoint.isActive(context) ? 360 : double.infinity,
       child: DefaultTabController(
         initialIndex: 0,
         length: 3,
@@ -94,7 +98,7 @@ class StandardPrimaryNavigation extends StatelessWidget {
             children: <Widget>[
               SurahTabBarView(
                 selectedChapter: selectedChapter,
-                onChapterClick: onChapterClick,
+                selectChapter: selectChapter,
               ),
               const Center(child: Text("Juz is not available yet")),
               const Center(child: Text("Bookmarks is not available yet")),

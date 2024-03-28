@@ -7,11 +7,11 @@ class SurahTabBarView extends StatefulWidget {
   const SurahTabBarView({
     super.key,
     required this.selectedChapter,
-    required this.onChapterClick,
+    required this.selectChapter,
   });
 
   final Chapter? selectedChapter;
-  final void Function(Chapter chapter)? onChapterClick;
+  final void Function(Chapter? chapter)? selectChapter;
 
   @override
   State<SurahTabBarView> createState() => _SurahTabBarViewState();
@@ -40,7 +40,7 @@ class _SurahTabBarViewState extends State<SurahTabBarView> {
         ListChapters(
           scrollController: scrollController,
           selectedChapter: widget.selectedChapter,
-          onChapterClick: widget.onChapterClick,
+          selectChapter: widget.selectChapter,
         ),
       ],
     );

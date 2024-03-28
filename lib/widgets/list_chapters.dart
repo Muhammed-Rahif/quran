@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:quran/classes/chapter.dart';
 import 'package:quran/providers/chapters_provider.dart';
 import 'package:quran/screens/chapter_screen.dart';
 import 'package:quran/widgets/display_error.dart';
+import 'package:quran/constants/app_contants.dart';
 
 class ListChapters extends StatefulWidget {
   const ListChapters({
     super.key,
     this.selectedChapter,
-    this.onChapterClick,
+    this.selectChapter,
     this.scrollController,
   });
 
-  final void Function(Chapter chapter)? onChapterClick;
+  final void Function(Chapter? chapter)? selectChapter;
   final Chapter? selectedChapter;
   final ScrollController? scrollController;
 
@@ -55,7 +55,7 @@ class _ListChaptersState extends State<ListChapters> {
               final chapter = chapters[index];
 
               return ChapterListTile(
-                onChapterClick: widget.onChapterClick,
+                selectChapter: widget.selectChapter,
                 chapter: chapter,
                 selectedChapter: widget.selectedChapter,
               );
@@ -70,12 +70,12 @@ class _ListChaptersState extends State<ListChapters> {
 class ChapterListTile extends StatelessWidget {
   const ChapterListTile({
     super.key,
-    required this.onChapterClick,
+    required this.selectChapter,
     required this.chapter,
     required this.selectedChapter,
   });
 
-  final void Function(Chapter chapter)? onChapterClick;
+  final void Function(Chapter? chapter)? selectChapter;
   final Chapter chapter;
   final Chapter? selectedChapter;
 
@@ -83,14 +83,14 @@ class ChapterListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        onChapterClick?.call(chapter);
+        selectChapter?.call(chapter);
 
-        if (!Breakpoints.mediumAndUp.isActive(context)) {
+        if (!AppConstants.breakpoint.isActive(context)) {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => ChapterScreen(
                 chapter: chapter,
-                // onBack: () =>,
+                onBack: () => selectChapter?.call(null),
               ),
             ),
           );

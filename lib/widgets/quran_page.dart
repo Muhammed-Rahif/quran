@@ -51,7 +51,7 @@ class _QuranPageState extends State<QuranPage> {
             .join('');
 
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10),
           // final pageText = List.generate(
           //   15,
           //   (index) {
@@ -78,36 +78,45 @@ class _QuranPageState extends State<QuranPage> {
           // ),
           // );
 
-          // TODO: Fix home tab bar reloading
-          // child: AutoSizeText(
-          //   pageText,
-          //   maxLines: 15,
-          //   textAlign: TextAlign.justify,
-          //   textDirection: TextDirection.rtl,
-          //   maxFontSize: 26,
-          //   minFontSize: 22,
-          //   locale: const Locale('ar'),
-          //   style: const TextStyle(
-          //     fontWeight: FontWeight.w500,
-          //     fontFamily: 'Kitab Regular',
-          //     locale: Locale('ar'),
-          //     height: 1.7,
-          //     color: Colors.white,
-          //   ),
-          // ),
-          child: ColorFiltered(
-            colorFilter: const ColorFilter.matrix(<double>[
-              -1.0, 0.0, 0.0, 0.0, 255.0, //
-              0.0, -1.0, 0.0, 0.0, 255.0, //
-              0.0, 0.0, -1.0, 0.0, 255.0, //
-              0.0, 0.0, 0.0, 1.0, 0.0, //
-            ]),
-            child: Image.network(
-              'https://github.com/Muhammed-Rahif/Quran-App-Data/blob/main/quran_images/${widget.pageNo}.png?raw=true',
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.contain,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              AutoSizeText(
+                pageText,
+                maxLines: 15,
+                textAlign: TextAlign.justify,
+                textDirection: TextDirection.rtl,
+                maxFontSize: 26,
+                minFontSize: 22,
+                locale: const Locale('ar'),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Kitab Regular',
+                  locale: Locale('ar'),
+                  height: 1.7,
+                  color: Colors.white,
+                ),
+              ),
+              Row(children: [
+                const Expanded(
+                    child: Divider(
+                  thickness: 0.1,
+                  height: 1,
+                )),
+                Text(
+                  '  Page ${widget.pageNo}  ',
+                  style: const TextStyle(
+                    color: Colors.white24,
+                    fontSize: 12,
+                  ),
+                ),
+                const Expanded(
+                    child: Divider(
+                  thickness: 0.1,
+                  height: 1,
+                )),
+              ])
+            ],
           ),
         );
       },

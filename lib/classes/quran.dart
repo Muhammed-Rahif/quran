@@ -63,7 +63,7 @@ class Meta {
 }
 
 class Filters {
-  final String pageNumber;
+  final String? pageNumber;
 
   Filters({
     required this.pageNumber,
@@ -125,5 +125,41 @@ class Verse {
         "id": id,
         "verse_key": verseKey,
         "text_uthmani": textUthmani,
+      };
+}
+
+class GetUthmanicScriptQuranFullResponse {
+  final List<Verse> verses;
+  final Meta meta;
+
+  GetUthmanicScriptQuranFullResponse({
+    required this.verses,
+    required this.meta,
+  });
+
+  GetUthmanicScriptQuranFullResponse copyWith({
+    List<Verse>? verses,
+    Meta? meta,
+  }) =>
+      GetUthmanicScriptQuranFullResponse(
+        verses: verses ?? this.verses,
+        meta: meta ?? this.meta,
+      );
+
+  factory GetUthmanicScriptQuranFullResponse.fromRawJson(String str) =>
+      GetUthmanicScriptQuranFullResponse.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory GetUthmanicScriptQuranFullResponse.fromJson(
+          Map<String, dynamic> json) =>
+      GetUthmanicScriptQuranFullResponse(
+        verses: List<Verse>.from(json["verses"].map((x) => Verse.fromJson(x))),
+        meta: Meta.fromJson(json["meta"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "verses": List<dynamic>.from(verses.map((x) => x.toJson())),
+        "meta": meta.toJson(),
       };
 }
