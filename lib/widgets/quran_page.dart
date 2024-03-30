@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:quran/classes/verse.dart';
 import 'package:quran/providers/verses_provider.dart';
-import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
+import 'package:network_font/network_font.dart';
 import 'package:quran/widgets/custom_progress_indicator.dart';
 import 'package:quran/widgets/display_error.dart';
 
@@ -21,18 +20,9 @@ class QuranPage extends StatefulWidget {
 class _QuranPageState extends State<QuranPage> {
   late Future<List<Verse>> versesByPageFuture =
       VersesProvider.getVersesByPage(widget.pageNo);
-
-  @override
-  void initState() {
-    super.initState();
-
-    final DynamicCachedFonts dynamicCachedFont = DynamicCachedFonts(
-      fontFamily: 'QCF V1 P${widget.pageNo}',
+  late final NetworkFont pageFont = NetworkFont('QCF V1 P${widget.pageNo}',
       url:
-          'https://github.com/quran/quran.com-images/raw/master/res/fonts/QCF_P${widget.pageNo.toString().padLeft(3, '0')}.TTF',
-    );
-    dynamicCachedFont.load();
-  }
+          'https://github.com/quran/quran.com-images/raw/master/res/fonts/QCF_P${widget.pageNo.toString().padLeft(3, '0')}.TTF');
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +73,8 @@ class _QuranPageState extends State<QuranPage> {
                   pageText,
                   textAlign: TextAlign.center,
                   textDirection: TextDirection.rtl,
-                  style: TextStyle(
+                  style: pageFont.style(
                     fontWeight: FontWeight.w500,
-                    fontFamily: 'QCF V1 P${widget.pageNo}',
                     locale: const Locale('ar'),
                     color: Colors.white,
                     fontSize: 25,
