@@ -13,8 +13,10 @@ dependencies:
   dio: ^5.4.1
   path_provider: ^2.1.2
   google_fonts: ^6.2.1
-  auto_size_text: ^3.0.0
-  scrollable_positioned_list: ^0.3.8
+  dynamic_cached_fonts:
+    git:
+      url: https://github.com/olaparty/dynamic_cached_fonts.git
+      ref: main
 
 dev_dependencies:
   flutter_test:

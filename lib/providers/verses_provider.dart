@@ -13,8 +13,8 @@ class VersesProvider {
     final List<Verse> verses;
     Map<String, dynamic> queryParameters = {
       'words': true,
-      'word_fields': 'text_uthmani',
-      'fields': 'text_uthmani',
+      'word_fields': 'code_v1,code_v2',
+      'fields': 'code_v1,code_v2',
     };
 
     try {
@@ -31,9 +31,9 @@ class VersesProvider {
         /// Cache the current request for future use.
         CacheUtil.setCache(cacheKey, response.data);
 
-        verses = GetVersesResponse.fromJson(response.data).verses;
+        verses = GetVersesByPageResponse.fromJson(response.data).verses;
       } else {
-        verses = GetVersesResponse.fromRawJson(cache).verses;
+        verses = GetVersesByPageResponse.fromRawJson(cache).verses;
       }
 
       return verses;

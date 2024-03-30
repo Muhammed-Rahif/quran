@@ -1,30 +1,30 @@
 import 'dart:convert';
 
-class GetVersesResponse {
+class GetVersesByPageResponse {
   final List<Verse> verses;
   final Pagination pagination;
 
-  GetVersesResponse({
+  GetVersesByPageResponse({
     required this.verses,
     required this.pagination,
   });
 
-  GetVersesResponse copyWith({
+  GetVersesByPageResponse copyWith({
     List<Verse>? verses,
     Pagination? pagination,
   }) =>
-      GetVersesResponse(
+      GetVersesByPageResponse(
         verses: verses ?? this.verses,
         pagination: pagination ?? this.pagination,
       );
 
-  factory GetVersesResponse.fromRawJson(String str) =>
-      GetVersesResponse.fromJson(json.decode(str));
+  factory GetVersesByPageResponse.fromRawJson(String str) =>
+      GetVersesByPageResponse.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory GetVersesResponse.fromJson(Map<String, dynamic> json) =>
-      GetVersesResponse(
+  factory GetVersesByPageResponse.fromJson(Map<String, dynamic> json) =>
+      GetVersesByPageResponse(
         verses: List<Verse>.from(json["verses"].map((x) => Verse.fromJson(x))),
         pagination: Pagination.fromJson(json["pagination"]),
       );
@@ -96,7 +96,8 @@ class Verse {
   final int rukuNumber;
   final int manzilNumber;
   final dynamic sajdahNumber;
-  final String textUthmani;
+  final String codeV1;
+  final String codeV2;
   final int pageNumber;
   final int juzNumber;
   final List<Word> words;
@@ -110,7 +111,8 @@ class Verse {
     required this.rukuNumber,
     required this.manzilNumber,
     required this.sajdahNumber,
-    required this.textUthmani,
+    required this.codeV1,
+    required this.codeV2,
     required this.pageNumber,
     required this.juzNumber,
     required this.words,
@@ -125,7 +127,8 @@ class Verse {
     int? rukuNumber,
     int? manzilNumber,
     dynamic sajdahNumber,
-    String? textUthmani,
+    String? codeV1,
+    String? codeV2,
     int? pageNumber,
     int? juzNumber,
     List<Word>? words,
@@ -139,7 +142,8 @@ class Verse {
         rukuNumber: rukuNumber ?? this.rukuNumber,
         manzilNumber: manzilNumber ?? this.manzilNumber,
         sajdahNumber: sajdahNumber ?? this.sajdahNumber,
-        textUthmani: textUthmani ?? this.textUthmani,
+        codeV1: codeV1 ?? this.codeV1,
+        codeV2: codeV2 ?? this.codeV2,
         pageNumber: pageNumber ?? this.pageNumber,
         juzNumber: juzNumber ?? this.juzNumber,
         words: words ?? this.words,
@@ -158,7 +162,8 @@ class Verse {
         rukuNumber: json["ruku_number"],
         manzilNumber: json["manzil_number"],
         sajdahNumber: json["sajdah_number"],
-        textUthmani: json["text_uthmani"],
+        codeV1: json["code_v1"],
+        codeV2: json["code_v2"],
         pageNumber: json["page_number"],
         juzNumber: json["juz_number"],
         words: List<Word>.from(json["words"].map((x) => Word.fromJson(x))),
@@ -173,7 +178,8 @@ class Verse {
         "ruku_number": rukuNumber,
         "manzil_number": manzilNumber,
         "sajdah_number": sajdahNumber,
-        "text_uthmani": textUthmani,
+        "code_v1": codeV1,
+        "code_v2": codeV2,
         "page_number": pageNumber,
         "juz_number": juzNumber,
         "words": List<dynamic>.from(words.map((x) => x.toJson())),
@@ -185,7 +191,8 @@ class Word {
   final int position;
   final String? audioUrl;
   final CharTypeName charTypeName;
-  final String textUthmani;
+  final String codeV1;
+  final String codeV2;
   final int pageNumber;
   final int lineNumber;
   final String text;
@@ -197,7 +204,8 @@ class Word {
     required this.position,
     required this.audioUrl,
     required this.charTypeName,
-    required this.textUthmani,
+    required this.codeV1,
+    required this.codeV2,
     required this.pageNumber,
     required this.lineNumber,
     required this.text,
@@ -210,7 +218,8 @@ class Word {
     int? position,
     String? audioUrl,
     CharTypeName? charTypeName,
-    String? textUthmani,
+    String? codeV1,
+    String? codeV2,
     int? pageNumber,
     int? lineNumber,
     String? text,
@@ -222,7 +231,8 @@ class Word {
         position: position ?? this.position,
         audioUrl: audioUrl ?? this.audioUrl,
         charTypeName: charTypeName ?? this.charTypeName,
-        textUthmani: textUthmani ?? this.textUthmani,
+        codeV1: codeV1 ?? this.codeV1,
+        codeV2: codeV2 ?? this.codeV2,
         pageNumber: pageNumber ?? this.pageNumber,
         lineNumber: lineNumber ?? this.lineNumber,
         text: text ?? this.text,
@@ -239,7 +249,8 @@ class Word {
         position: json["position"],
         audioUrl: json["audio_url"],
         charTypeName: charTypeNameValues.map[json["char_type_name"]]!,
-        textUthmani: json["text_uthmani"],
+        codeV1: json["code_v1"],
+        codeV2: json["code_v2"],
         pageNumber: json["page_number"],
         lineNumber: json["line_number"],
         text: json["text"],
@@ -252,7 +263,8 @@ class Word {
         "position": position,
         "audio_url": audioUrl,
         "char_type_name": charTypeNameValues.reverse[charTypeName],
-        "text_uthmani": textUthmani,
+        "code_v1": codeV1,
+        "code_v2": codeV2,
         "page_number": pageNumber,
         "line_number": lineNumber,
         "text": text,

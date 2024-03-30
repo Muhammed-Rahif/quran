@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/widgets.dart';
 import 'package:quran/classes/verse.dart';
 import 'package:quran/providers/verses_provider.dart';
-import 'package:quran/utils/number_util.dart';
+import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:quran/widgets/custom_progress_indicator.dart';
 import 'package:quran/widgets/display_error.dart';
 
@@ -21,6 +21,18 @@ class QuranPage extends StatefulWidget {
 class _QuranPageState extends State<QuranPage> {
   late Future<List<Verse>> versesByPageFuture =
       VersesProvider.getVersesByPage(widget.pageNo);
+
+  @override
+  void initState() {
+    super.initState();
+
+    final DynamicCachedFonts dynamicCachedFont = DynamicCachedFonts(
+      fontFamily: 'QCF V1 P${widget.pageNo}',
+      url:
+          'https://github.com/quran/quran.com-images/raw/master/res/fonts/QCF_P${widget.pageNo.toString().padLeft(3, '0')}.TTF',
+    );
+    dynamicCachedFont.load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,65 +59,37 @@ class _QuranPageState extends State<QuranPage> {
 
         final verses = snapshot.data!;
 
-        final pageText = verses.map((verse) {
-          String str = '';
+        final allWords = verses.expand((verse) => verse.words).toList();
+        final pageText = List.generate(
+          15,
+          (index) {
+            final lineWords =
+                allWords.where((word) => word.lineNumber == index + 1).toList();
+            final lineStr =
+                '${lineWords.map((word) => word.codeV1).join('')}${index == 14 ? '' : '\n'}';
 
-          if (verse.verseNumber == 1 && verse.pageNumber != 1) {
-            str +=
-                '\n                 ▐░░░░░░░░░░░░░▌ بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ▐░░░░░░░░░░░░░▌\n';
-          }
-
-          str += verse.textUthmani +
-              NumberUtil.getArabicNumber(verse.verseNumber, isAyahEnd: true);
-
-          return str;
-        }).join('');
+            return lineStr;
+          },
+        ).join();
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10),
-          // final pageText = List.generate(
-          //   15,
-          //   (index) {
-          //     final lineWords = allWords
-          //         .where((word) => word.lineNumber == index + 1)
-          //         .toList();
-          //     final lineStr =
-          //         '${lineWords.map((word) => word.textUthmani).join(' ')}\n';
-
-          //     return lineStr;
-          //   },
-          // ).join();
-
-          // return SelectableText(
-          // pageText,
-          // textAlign: TextAlign.justify,
-          // textDirection: TextDirection.rtl,
-          // style: const TextStyle(
-          //   fontSize: 30,
-          //   fontWeight: FontWeight.w500,
-          //   fontFamily: 'Kitab Regular',
-          //   locale: Locale('ar'),
-          //   height: 1.5,
-          // ),
-          // );
-
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AutoSizeText(
-                pageText,
-                maxLines: 15,
-                textAlign: TextAlign.justify,
-                textDirection: TextDirection.rtl,
-                maxFontSize: 26,
-                minFontSize: 22,
-                locale: const Locale('ar'),
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Kitab Regular',
-                  locale: Locale('ar'),
-                  height: 1.7,
-                  color: Colors.white,
+              SizedBox(
+                width: 400,
+                child: Text(
+                  pageText,
+                  textAlign: TextAlign.center,
+                  textDirection: TextDirection.rtl,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'QCF V1 P${widget.pageNo}',
+                    locale: const Locale('ar'),
+                    color: Colors.white,
+                    fontSize: 25,
+                  ),
                 ),
               ),
               Row(children: [
