@@ -155,14 +155,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.4"
-  hive:
-    dependency: transitive
-    description:
-      name: hive
-      sha256: "8dcf6db979d7933da8217edcec84e9df1bdb4e4edc7fc77dbd5aa74356d6d941"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.3"
   http:
     dependency: transitive
     description:
@@ -259,14 +251,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
-  network_font:
-    dependency: "direct main"
-    description:
-      name: network_font
-      sha256: b1c1b6b0b5dcc10efade42ff8b2b249fcc067b91f6700e6f116058db5f57cb00
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.4"
   path:
     dependency: transitive
     description:

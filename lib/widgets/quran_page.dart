@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:quran/classes/verse.dart';
 import 'package:quran/providers/verses_provider.dart';
-import 'package:network_font/network_font.dart';
+import 'package:quran/utils/font_util.dart';
 import 'package:quran/widgets/custom_progress_indicator.dart';
 import 'package:quran/widgets/display_error.dart';
 
@@ -20,9 +23,17 @@ class QuranPage extends StatefulWidget {
 class _QuranPageState extends State<QuranPage> {
   late Future<List<Verse>> versesByPageFuture =
       VersesProvider.getVersesByPage(widget.pageNo);
-  late final NetworkFont pageFont = NetworkFont('QCF V1 P${widget.pageNo}',
-      url:
-          'https://github.com/quran/quran.com-images/raw/master/res/fonts/QCF_P${widget.pageNo.toString().padLeft(3, '0')}.TTF');
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadPageFont();
+  }
+
+  void loadPageFont() async {
+    await FontUtil.uthmanicQuranPageFont(widget.pageNo);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,35 +60,56 @@ class _QuranPageState extends State<QuranPage> {
 
         final verses = snapshot.data!;
 
-        final allWords = verses.expand((verse) => verse.words).toList();
-        final pageText = List.generate(
+        final allWordsInPage = verses.expand((verse) => verse.words).toList();
+        final List<List<Word>> pageLines = List.generate(
           15,
           (index) {
-            final lineWords =
-                allWords.where((word) => word.lineNumber == index + 1).toList();
-            final lineStr =
-                '${lineWords.map((word) => word.codeV1).join('')}${index == 14 ? '' : '\n'}';
+            final lineWords = allWordsInPage
+                .where((word) => word.lineNumber == index + 1)
+                .toList();
 
-            return lineStr;
+            return lineWords;
           },
-        ).join();
+        );
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(
-                width: 400,
-                child: Text(
-                  pageText,
+              Flexible(
+                child: RichText(
                   textAlign: TextAlign.center,
                   textDirection: TextDirection.rtl,
-                  style: pageFont.style(
-                    fontWeight: FontWeight.w500,
-                    locale: const Locale('ar'),
-                    color: Colors.white,
-                    fontSize: 25,
+                  text: TextSpan(
+                    children: [
+                      for (var line in pageLines)
+                        TextSpan(
+                          text: '${line.map((word) => word.codeV2).join('')}\n',
+                          style: TextStyle(
+                            fontFamily: 'QCF V2 P${widget.pageNo}',
+                            color: Colors.white,
+                            fontSize: 20,
+                            locale: const Locale('ar'),
+                            letterSpacing: 3,
+                          ),
+                          recognizer: LongPressGestureRecognizer()
+                            ..onLongPress = () {
+                              ScaffoldMessenger.of(context).clearSnackBars();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Quran Page ${widget.pageNo} - Line ${line.first.lineNumber}',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            },
+                        ),
+                    ],
                   ),
                 ),
               ),

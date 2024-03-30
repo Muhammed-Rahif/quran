@@ -21,6 +21,11 @@ class ChapterScreen extends StatelessWidget {
       }
     });
 
+    final PageController controller = PageController(
+      initialPage: chapter.pages.first - 1,
+      viewportFraction: 1,
+    );
+
     return Scaffold(
       appBar: AppBar(
         notificationPredicate: (notification) => true,
@@ -40,6 +45,8 @@ class ChapterScreen extends StatelessWidget {
             : null,
       ),
       body: PageView.builder(
+        reverse: true,
+        controller: controller,
         itemCount: 604,
         itemBuilder: (context, indx) => QuranPage(pageNo: indx + 1),
       ),
