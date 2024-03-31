@@ -115,8 +115,11 @@ class ChapterListTile extends StatelessWidget {
         ],
       ),
       trailing: Text(
-        chapter.nameArabic,
-        style: const TextStyle(fontFamily: 'Uthmanic Script', fontSize: 16),
+        '\uE902',
+        style: const TextStyle(
+          fontFamily: 'Surah Names',
+          fontSize: 22,
+        ),
       ),
       subtitle: Text(chapter.translatedName.name),
       title: Text(chapter.nameSimple),

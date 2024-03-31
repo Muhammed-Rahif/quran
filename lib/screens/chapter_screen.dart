@@ -21,10 +21,9 @@ class ChapterScreen extends StatelessWidget {
       }
     });
 
-    final PageController controller = PageController(
-      initialPage: chapter.pages.first - 1,
-      viewportFraction: 1,
-    );
+    final ScrollController controller = ScrollController(
+        // initialPage: chapter.pages.first - 1,
+        );
 
     return Scaffold(
       appBar: AppBar(
@@ -44,9 +43,9 @@ class ChapterScreen extends StatelessWidget {
               )
             : null,
       ),
-      body: PageView.builder(
-        reverse: true,
+      body: ListView.builder(
         controller: controller,
+        scrollDirection: Axis.vertical,
         itemCount: 604,
         itemBuilder: (context, indx) => QuranPage(pageNo: indx + 1),
       ),

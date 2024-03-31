@@ -61,7 +61,7 @@ class _QuranPageState extends State<QuranPage> {
         final verses = snapshot.data!;
 
         final allWordsInPage = verses.expand((verse) => verse.words).toList();
-        final List<List<Word>> pageLines = List.generate(
+        final List<List<Word>> pageLinesWords = List.generate(
           15,
           (index) {
             final lineWords = allWordsInPage
@@ -70,48 +70,53 @@ class _QuranPageState extends State<QuranPage> {
 
             return lineWords;
           },
-        );
+        ).where((element) => element.isNotEmpty).toList();
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Flexible(
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  textDirection: TextDirection.rtl,
-                  text: TextSpan(
-                    children: [
-                      for (var line in pageLines)
-                        TextSpan(
-                          text: '${line.map((word) => word.codeV2).join('')}\n',
-                          style: TextStyle(
-                            fontFamily: 'QCF V2 P${widget.pageNo}',
-                            color: Colors.white,
-                            fontSize: 20,
-                            locale: const Locale('ar'),
-                            letterSpacing: 3,
-                          ),
-                          recognizer: LongPressGestureRecognizer()
-                            ..onLongPress = () {
-                              ScaffoldMessenger.of(context).clearSnackBars();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Quran Page ${widget.pageNo} - Line ${line.first.lineNumber}',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            },
-                        ),
-                    ],
-                  ),
-                ),
+              RichText(
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.rtl,
+                text: TextSpan(
+                    children: List.generate(
+                  pageLinesWords.length,
+                  (index) {
+                    final line = pageLinesWords[index];
+                    var newLine =
+                        index == pageLinesWords.length - 1 ? '' : '\n';
+                    final text =
+                        '${line.map((word) => word.text).join('')}$newLine';
+
+                    return TextSpan(
+                      text: text,
+                      style: TextStyle(
+                        fontFamily: 'QCF V2 P${widget.pageNo}',
+                        color: Colors.white,
+                        fontSize: 20,
+                        locale: const Locale('ar'),
+                        letterSpacing: 2,
+                        height: 1.8,
+                      ),
+                      recognizer: LongPressGestureRecognizer()
+                        ..onLongPress = () {
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Quran Page ${widget.pageNo} - Line ${line.first.lineNumber}',
+                                textAlign: TextAlign.center,
+                              ),
+                              backgroundColor: Theme.of(context).primaryColor,
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        },
+                    );
+                  },
+                )),
               ),
               Row(children: [
                 const Expanded(

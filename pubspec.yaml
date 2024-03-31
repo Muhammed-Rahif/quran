@@ -29,15 +29,27 @@ flutter:
     # - assets/quran/page-images/
 
   fonts:
-    - family: Me Quran
+    # - family: Me Quran
+    #   fonts:
+    #     - asset: assets/fonts/Me-Quran-Regular.ttf
+    # - family: Uthmanic Script
+    #   fonts:
+    #     - asset: assets/fonts/Uthmanic-Script-HAFS-Regular.otf
+    # - family: Kitab Regular
+    #   fonts:
+    #     - asset: assets/fonts/Kitab-Regular.ttf
+    # - family: Surah Names
+    #   fonts:
+    #     - asset: assets/fonts/Surah-Names.ttf
+    # - family: UthmanicHafs
+    #   fonts:
+    #     - asset: assets/fonts/UthmanicHafs.otf
+    - family: QCF BSML
       fonts:
-        - asset: assets/fonts/Me-Quran-Regular.ttf
-    - family: Uthmanic Script
+        - asset: assets/fonts/QCF-BSML.woff
+    - family: Surah Names
       fonts:
-        - asset: assets/fonts/Uthmanic-Script-HAFS-Regular.otf
-    - family: Kitab Regular
-      fonts:
-        - asset: assets/fonts/Kitab-Regular.ttf
+        - asset: assets/fonts/Surah-Names.ttf
 
 flutter_launcher_icons:
   android: "launcher_icon"

@@ -38,9 +38,9 @@ class GetVersesByPageResponse {
 class Pagination {
   final int perPage;
   final int currentPage;
-  final dynamic nextPage;
-  final int totalPages;
-  final int totalRecords;
+  final int? nextPage;
+  final int? totalPages;
+  final int? totalRecords;
 
   Pagination({
     required this.perPage,
@@ -53,7 +53,7 @@ class Pagination {
   Pagination copyWith({
     int? perPage,
     int? currentPage,
-    dynamic nextPage,
+    int? nextPage,
     int? totalPages,
     int? totalRecords,
   }) =>
@@ -74,78 +74,106 @@ class Pagination {
         perPage: json["per_page"],
         currentPage: json["current_page"],
         nextPage: json["next_page"],
-        totalPages: json["total_pages"],
-        totalRecords: json["total_records"],
+        totalPages: json["total_pages="],
+        totalRecords: json["total_records="],
       );
 
   Map<String, dynamic> toJson() => {
         "per_page": perPage,
         "current_page": currentPage,
         "next_page": nextPage,
-        "total_pages": totalPages,
-        "total_records": totalRecords,
+        "total_pages=": totalPages,
+        "total_records=": totalRecords,
       };
 }
 
 class Verse {
-  final int id;
-  final int verseNumber;
-  final String verseKey;
-  final int hizbNumber;
-  final int rubElHizbNumber;
-  final int rukuNumber;
-  final int manzilNumber;
+  final int? id;
+  final int? chapterId;
+  final int? verseNumber;
+  final String? verseKey;
+  final int? verseIndex;
+  final String? textUthmani;
+  final String? textUthmaniSimple;
+  final String? textImlaei;
+  final String? textImlaeiSimple;
+  final String? textIndopak;
+  final String? textUthmaniTajweed;
+  final int? juzNumber;
+  final int? hizbNumber;
+  final int? rubNumber;
+  final dynamic sajdahType;
   final dynamic sajdahNumber;
-  final String codeV1;
-  final String codeV2;
-  final int pageNumber;
-  final int juzNumber;
+  final int? pageNumber;
+  final String? imageUrl;
+  final int? imageWidth;
   final List<Word> words;
 
   Verse({
     required this.id,
+    required this.chapterId,
     required this.verseNumber,
     required this.verseKey,
-    required this.hizbNumber,
-    required this.rubElHizbNumber,
-    required this.rukuNumber,
-    required this.manzilNumber,
-    required this.sajdahNumber,
-    required this.codeV1,
-    required this.codeV2,
-    required this.pageNumber,
+    required this.verseIndex,
+    required this.textUthmani,
+    required this.textUthmaniSimple,
+    required this.textImlaei,
+    required this.textImlaeiSimple,
+    required this.textIndopak,
+    required this.textUthmaniTajweed,
     required this.juzNumber,
+    required this.hizbNumber,
+    required this.rubNumber,
+    required this.sajdahType,
+    required this.sajdahNumber,
+    required this.pageNumber,
+    required this.imageUrl,
+    required this.imageWidth,
     required this.words,
   });
 
   Verse copyWith({
     int? id,
+    int? chapterId,
     int? verseNumber,
     String? verseKey,
-    int? hizbNumber,
-    int? rubElHizbNumber,
-    int? rukuNumber,
-    int? manzilNumber,
-    dynamic sajdahNumber,
-    String? codeV1,
-    String? codeV2,
-    int? pageNumber,
+    int? verseIndex,
+    String? textUthmani,
+    String? textUthmaniSimple,
+    String? textImlaei,
+    String? textImlaeiSimple,
+    String? textIndopak,
+    String? textUthmaniTajweed,
     int? juzNumber,
+    int? hizbNumber,
+    int? rubNumber,
+    dynamic sajdahType,
+    dynamic sajdahNumber,
+    int? pageNumber,
+    String? imageUrl,
+    int? imageWidth,
     List<Word>? words,
   }) =>
       Verse(
         id: id ?? this.id,
+        chapterId: chapterId ?? this.chapterId,
         verseNumber: verseNumber ?? this.verseNumber,
         verseKey: verseKey ?? this.verseKey,
-        hizbNumber: hizbNumber ?? this.hizbNumber,
-        rubElHizbNumber: rubElHizbNumber ?? this.rubElHizbNumber,
-        rukuNumber: rukuNumber ?? this.rukuNumber,
-        manzilNumber: manzilNumber ?? this.manzilNumber,
-        sajdahNumber: sajdahNumber ?? this.sajdahNumber,
-        codeV1: codeV1 ?? this.codeV1,
-        codeV2: codeV2 ?? this.codeV2,
-        pageNumber: pageNumber ?? this.pageNumber,
+        verseIndex: verseIndex ?? this.verseIndex,
+        textUthmani: textUthmani ?? this.textUthmani,
+        textUthmaniSimple: textUthmaniSimple ?? this.textUthmaniSimple,
+        textImlaei: textImlaei ?? this.textImlaei,
+        textImlaeiSimple: textImlaeiSimple ?? this.textImlaeiSimple,
+        textIndopak: textIndopak ?? this.textIndopak,
+        textUthmaniTajweed: textUthmaniTajweed ?? this.textUthmaniTajweed,
         juzNumber: juzNumber ?? this.juzNumber,
+        hizbNumber: hizbNumber ?? this.hizbNumber,
+        rubNumber: rubNumber ?? this.rubNumber,
+        sajdahType: sajdahType ?? this.sajdahType,
+        sajdahNumber: sajdahNumber ?? this.sajdahNumber,
+        pageNumber: pageNumber ?? this.pageNumber,
+        imageUrl: imageUrl ?? this.imageUrl,
+        imageWidth: imageWidth ?? this.imageWidth,
         words: words ?? this.words,
       );
 
@@ -155,33 +183,47 @@ class Verse {
 
   factory Verse.fromJson(Map<String, dynamic> json) => Verse(
         id: json["id"],
+        chapterId: json["chapter_id"],
         verseNumber: json["verse_number"],
         verseKey: json["verse_key"],
-        hizbNumber: json["hizb_number"],
-        rubElHizbNumber: json["rub_el_hizb_number"],
-        rukuNumber: json["ruku_number"],
-        manzilNumber: json["manzil_number"],
-        sajdahNumber: json["sajdah_number"],
-        codeV1: json["code_v1"],
-        codeV2: json["code_v2"],
-        pageNumber: json["page_number"],
+        verseIndex: json["verse_index"],
+        textUthmani: json["text_uthmani"],
+        textUthmaniSimple: json["text_uthmani_simple"],
+        textImlaei: json["text_imlaei"],
+        textImlaeiSimple: json["text_imlaei_simple"],
+        textIndopak: json["text_indopak"],
+        textUthmaniTajweed: json["text_uthmani_tajweed"],
         juzNumber: json["juz_number"],
+        hizbNumber: json["hizb_number"],
+        rubNumber: json["rub_number"],
+        sajdahType: json["sajdah_type"],
+        sajdahNumber: json["sajdah_number"],
+        pageNumber: json["page_number"],
+        imageUrl: json["image_url"],
+        imageWidth: json["image_width"],
         words: List<Word>.from(json["words"].map((x) => Word.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "chapter_id": chapterId,
         "verse_number": verseNumber,
         "verse_key": verseKey,
-        "hizb_number": hizbNumber,
-        "rub_el_hizb_number": rubElHizbNumber,
-        "ruku_number": rukuNumber,
-        "manzil_number": manzilNumber,
-        "sajdah_number": sajdahNumber,
-        "code_v1": codeV1,
-        "code_v2": codeV2,
-        "page_number": pageNumber,
+        "verse_index": verseIndex,
+        "text_uthmani": textUthmani,
+        "text_uthmani_simple": textUthmaniSimple,
+        "text_imlaei": textImlaei,
+        "text_imlaei_simple": textImlaeiSimple,
+        "text_indopak": textIndopak,
+        "text_uthmani_tajweed": textUthmaniTajweed,
         "juz_number": juzNumber,
+        "hizb_number": hizbNumber,
+        "rub_number": rubNumber,
+        "sajdah_type": sajdahType,
+        "sajdah_number": sajdahNumber,
+        "page_number": pageNumber,
+        "image_url": imageUrl,
+        "image_width": imageWidth,
         "words": List<dynamic>.from(words.map((x) => x.toJson())),
       };
 }
@@ -198,6 +240,7 @@ class Word {
   final String text;
   final Translation translation;
   final Translation transliteration;
+  final String? textUthmani;
 
   Word({
     required this.id,
@@ -211,6 +254,7 @@ class Word {
     required this.text,
     required this.translation,
     required this.transliteration,
+    required this.textUthmani,
   });
 
   Word copyWith({
@@ -225,6 +269,7 @@ class Word {
     String? text,
     Translation? translation,
     Translation? transliteration,
+    String? textUthmani,
   }) =>
       Word(
         id: id ?? this.id,
@@ -238,6 +283,7 @@ class Word {
         text: text ?? this.text,
         translation: translation ?? this.translation,
         transliteration: transliteration ?? this.transliteration,
+        textUthmani: textUthmani ?? this.textUthmani,
       );
 
   factory Word.fromRawJson(String str) => Word.fromJson(json.decode(str));
@@ -254,6 +300,7 @@ class Word {
         pageNumber: json["page_number"],
         lineNumber: json["line_number"],
         text: json["text"],
+        textUthmani: json["text_uthmani"],
         translation: Translation.fromJson(json["translation"]),
         transliteration: Translation.fromJson(json["transliteration"]),
       );
@@ -280,7 +327,7 @@ final charTypeNameValues =
 
 class Translation {
   final String? text;
-  final LanguageName languageName;
+  final String languageName;
 
   Translation({
     required this.text,
@@ -289,7 +336,7 @@ class Translation {
 
   Translation copyWith({
     String? text,
-    LanguageName? languageName,
+    String? languageName,
   }) =>
       Translation(
         text: text ?? this.text,
@@ -303,18 +350,14 @@ class Translation {
 
   factory Translation.fromJson(Map<String, dynamic> json) => Translation(
         text: json["text"],
-        languageName: languageNameValues.map[json["language_name"]]!,
+        languageName: json["language_name"],
       );
 
   Map<String, dynamic> toJson() => {
         "text": text,
-        "language_name": languageNameValues.reverse[languageName],
+        "language_name": languageName,
       };
 }
-
-enum LanguageName { english }
-
-final languageNameValues = EnumValues({"english": LanguageName.english});
 
 class EnumValues<T> {
   Map<String, T> map;
