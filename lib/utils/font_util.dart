@@ -8,7 +8,7 @@ class FontUtil {
   ]) async {
     final custom = FontLoader('$fontNamePrefix$pageNo');
     final loadedFont = loadFont(
-      'https://github.com/mustafa0x/qpc-fonts/raw/master/mushaf-v2/QCF2${pageNo.toString().padLeft(3, '0')}.ttf',
+      'https://raw.githubusercontent.com/mustafa0x/qpc-fonts/master/mushaf-v2/QCF2${pageNo.toString().padLeft(3, '0')}.ttf',
     );
 
     custom.addFont(loadedFont);
@@ -18,9 +18,7 @@ class FontUtil {
   static Future<ByteData> loadFont(String path) async {
     final response = await Dio().get<List<int>>(
       path,
-      options: Options(
-        responseType: ResponseType.bytes,
-      ),
+      options: Options(responseType: ResponseType.bytes),
     );
 
     return ByteData.view(Uint8List.fromList(response.data!).buffer);
