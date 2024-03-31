@@ -107,7 +107,7 @@ class ChapterListTile extends StatelessWidget {
         children: [
           Text('${chapter.id}'),
           Image.asset(
-            'assets/images/number-wrapper-1.png',
+            'assets/images/number-wrapper.png',
             width: 40,
             height: 40,
             color: Theme.of(context).colorScheme.primary,
@@ -115,10 +115,11 @@ class ChapterListTile extends StatelessWidget {
         ],
       ),
       trailing: Text(
-        '\uE902',
+        chapter.id.toString().padLeft(3, '0'),
         style: const TextStyle(
-          fontFamily: 'Surah Names',
-          fontSize: 22,
+          fontFamily: 'Surah-Names',
+          fontFamilyFallback: ['Surah-Names-2'],
+          fontSize: 26,
         ),
       ),
       subtitle: Text(chapter.translatedName.name),

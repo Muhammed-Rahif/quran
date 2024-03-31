@@ -13,6 +13,10 @@ dependencies:
   dio: ^5.4.1
   path_provider: ^2.1.2
   google_fonts: ^4.0.4
+  dynamic_cached_fonts:
+    git:
+      url: https://github.com/Muhammed-Rahif/dynamic_cached_fonts.git
+      ref: main
 
 dev_dependencies:
   flutter_test:
@@ -29,27 +33,30 @@ flutter:
     # - assets/quran/page-images/
 
   fonts:
-    # - family: Me Quran
-    #   fonts:
-    #     - asset: assets/fonts/Me-Quran-Regular.ttf
-    # - family: Uthmanic Script
-    #   fonts:
-    #     - asset: assets/fonts/Uthmanic-Script-HAFS-Regular.otf
-    # - family: Kitab Regular
-    #   fonts:
-    #     - asset: assets/fonts/Kitab-Regular.ttf
-    # - family: Surah Names
+    - family: Surah-Names
+      fonts:
+        - asset: assets/fonts/sura_names.woff
+    - family: Surah-Names-2
+      fonts:
+        - asset: assets/fonts/sura_names.woff2
+    # - family: Surah-Names
     #   fonts:
     #     - asset: assets/fonts/Surah-Names.ttf
-    # - family: UthmanicHafs
+    # - family: QCF-BSML
+    #   fonts:
+    #     - asset: assets/fonts/QCF-BSML.woff
+    # - family: Me-Quran
+    #   fonts:
+    #     - asset: assets/fonts/Me-Quran-Regular.ttf
+    # - family: Uthmanic-Script
+    #   fonts:
+    #     - asset: assets/fonts/Uthmanic-Script-HAFS-Regular.otf
+    # - family: Kitab-Regular
+    #   fonts:
+    #     - asset: assets/fonts/Kitab-Regular.ttf
+    # - family: Uthmanic-Hafs
     #   fonts:
     #     - asset: assets/fonts/UthmanicHafs.otf
-    - family: QCF BSML
-      fonts:
-        - asset: assets/fonts/QCF-BSML.woff
-    - family: Surah Names
-      fonts:
-        - asset: assets/fonts/Surah-Names.ttf
 
 flutter_launcher_icons:
   android: "launcher_icon"
