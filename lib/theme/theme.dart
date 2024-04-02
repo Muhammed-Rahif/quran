@@ -17,6 +17,12 @@ class AppTheme {
       fontFamily: GoogleFonts.ubuntu().fontFamily,
       splashFactory: NoSplash.splashFactory,
       iconTheme: const IconThemeData(color: AppColors.backgroundColor),
+      popupMenuTheme: const PopupMenuThemeData(
+        color: AppColors.backgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
       appBarTheme: const AppBarTheme(
         elevation: 0,
         color: AppColors.primaryColor,
@@ -25,11 +31,9 @@ class AppTheme {
       searchBarTheme: SearchBarThemeData(
         backgroundColor: searchBarColor,
         overlayColor: searchBarColor,
-        surfaceTintColor: searchBarColor,
       ),
       searchViewTheme: SearchViewThemeData(
         backgroundColor: searchViewColor,
-        surfaceTintColor: searchViewColor,
       ),
       primaryColor: AppColors.primaryColor,
       colorScheme: ColorScheme.fromSwatch(
@@ -37,6 +41,7 @@ class AppTheme {
       ).copyWith(
         primary: AppColors.primaryColor,
         background: AppColors.backgroundColor,
+        surfaceTint: Colors.grey,
       ),
     );
   }

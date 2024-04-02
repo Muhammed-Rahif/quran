@@ -80,9 +80,18 @@ class StandardPrimaryNavigation extends StatelessWidget {
                 onPressed: () {},
                 icon: const Icon(Icons.search),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.more_vert),
+              PopupMenuButton<String>(
+                onSelected: (item) {},
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: '1',
+                    child: Text('Go to page'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: '2',
+                    child: Text('Settings'),
+                  ),
+                ],
               ),
             ],
             bottom: const TabBar(

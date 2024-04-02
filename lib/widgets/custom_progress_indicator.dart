@@ -7,19 +7,23 @@ class CustomProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: Center(
-        child: text != null
-            ? Text(
-                text!,
-                style: const TextStyle(
-                  color: Colors.white24,
-                  fontSize: 10,
-                ),
-              )
-            : const CircularProgressIndicator(strokeCap: StrokeCap.round),
-      ),
-    );
+    if (text != null) {
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * .8,
+        child: Center(
+          child: Text(
+            text!,
+            style: const TextStyle(
+              color: Colors.white24,
+              fontSize: 10,
+            ),
+          ),
+        ),
+      );
+    } else {
+      return const Center(
+        child: CircularProgressIndicator(strokeCap: StrokeCap.round),
+      );
+    }
   }
 }

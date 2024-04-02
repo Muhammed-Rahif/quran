@@ -1,11 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:quran/classes/verse.dart';
+import 'package:quran/providers/font_provider.dart';
 import 'package:quran/providers/verses_provider.dart';
-import 'package:quran/utils/font_util.dart';
 import 'package:quran/widgets/custom_progress_indicator.dart';
 import 'package:quran/widgets/display_error.dart';
-import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 
 class QuranPage extends StatefulWidget {
   const QuranPage({
@@ -22,27 +21,24 @@ class QuranPage extends StatefulWidget {
 class _QuranPageState extends State<QuranPage> {
   late Future<List<Verse>> versesByPageFuture =
       VersesProvider.getVersesByPage(widget.pageNo);
+  late Future<NetworkFont> networkFontFuture = FontProvider.networkFont(
+    'QCF V2 P${widget.pageNo}',
+    url:
+        'https://raw.githubusercontent.com/mustafa0x/qpc-fonts/master/mushaf-v2/QCF2${widget.pageNo.toString().padLeft(3, '0')}.ttf',
+  );
 
   @override
   void initState() {
     super.initState();
-
     loadPageFont();
   }
 
-  void loadPageFont() async {
-    final DynamicCachedFonts dynamicCachedFont = DynamicCachedFonts(
-      fontFamily: 'QCF V2 P${widget.pageNo}',
-      url:
-          'https://raw.githubusercontent.com/mustafa0x/qpc-fonts/master/mushaf-v2/QCF2${widget.pageNo.toString().padLeft(3, '0')}.ttf',
-    );
-    dynamicCachedFont.load();
-  }
+  loadPageFont() async {}
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: versesByPageFuture,
+      future: Future.wait([versesByPageFuture, networkFontFuture]),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return CustomProgressIndicator(
@@ -62,7 +58,8 @@ class _QuranPageState extends State<QuranPage> {
           );
         }
 
-        final verses = snapshot.data!;
+        final verses = snapshot.data!.first as List<Verse>;
+        final networkFont = snapshot.data!.last as NetworkFont;
 
         final allWordsInPage = verses.expand((verse) => verse.words).toList();
         final List<List<Word>> pageLinesWords = List.generate(
@@ -98,7 +95,7 @@ class _QuranPageState extends State<QuranPage> {
                       return TextSpan(
                         text: text,
                         style: TextStyle(
-                          fontFamily: 'QCF V2 P${widget.pageNo}',
+                          fontFamily: networkFont.fontName,
                           color: Colors.white,
                           fontSize: constraints.minWidth / 18,
                           locale: const Locale('ar'),

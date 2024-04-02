@@ -17,7 +17,8 @@ class SurahTabBarView extends StatefulWidget {
   State<SurahTabBarView> createState() => _SurahTabBarViewState();
 }
 
-class _SurahTabBarViewState extends State<SurahTabBarView> {
+class _SurahTabBarViewState extends State<SurahTabBarView>
+    with AutomaticKeepAliveClientMixin<SurahTabBarView> {
   bool isScrolled = false;
   final ScrollController scrollController = ScrollController();
 
@@ -33,7 +34,11 @@ class _SurahTabBarViewState extends State<SurahTabBarView> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         LastReadCard(expanded: !isScrolled),

@@ -19,7 +19,7 @@ class DisplayError extends StatelessWidget {
         children: [
           SizedBox(
             width: 380,
-            child: Text(error, textAlign: TextAlign.center),
+            child: SelectableText(error, textAlign: TextAlign.center),
           ),
           const SizedBox(height: 8),
           ElevatedButton(
