@@ -29,6 +29,9 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
 
+    <!-- Custom css -->
+    <link rel="stylesheet" href="style.css" />
+
     <title>Quran</title>
     <link rel="manifest" href="manifest.json" />
 
@@ -40,17 +43,65 @@
     <script src="flutter.js" defer></script>
   </head>
   <body>
+    <div id="loading-container">
+      <p>
+        "And be patient. Indeed, Allah is with the patient." <br />
+        <small>Quran 8:46</small>
+      </p>
+      <div class="progress-container" id="progressbar">
+        <div class="progress-bar" id="progress"></div>
+      </div>
+    </div>
+
     <script>
-      window.addEventListener("load", function (ev) {
-        // Download main.dart.js
+      const delay = (delayInms) => {
+        return new Promise((resolve) => setTimeout(resolve, delayInms));
+      };
+
+      // Get references to the progress bar container and the progress bar element.
+      const loadingContainer = document.getElementById("loading-container");
+      const progress = document.getElementById("progress");
+      const progressBar = document.getElementById("progressbar");
+
+      // Set the initial width of the progress bar to 0%.
+      progress.style.width = `0%`;
+
+      // Listen for the "load" event of the window.
+      window.addEventListener("load", async function (ev) {
+        // Set an initial progress of 33% when the page loads.
+        progress.style.width = `33%`;
+
+        // Download main.dart.js and initialize the Flutter engine.
         _flutter.loader.loadEntrypoint({
           serviceWorker: {
             serviceWorkerVersion: serviceWorkerVersion,
           },
-          onEntrypointLoaded: function (engineInitializer) {
-            engineInitializer.initializeEngine().then(function (appRunner) {
-              appRunner.runApp();
-            });
+          onEntrypointLoaded: async function (engineInitializer) {
+            // Update progress to 66% after the entry point is loaded.
+            progress.style.width = `66%`;
+
+            // Initialize the Flutter engine.
+            const appRunner = await engineInitializer.initializeEngine();
+
+            // Set progress to 99% before adding a delay.
+            progress.style.width = `99%`;
+
+            // Add a delay using the addDelay function.
+            await delay(500);
+
+            // Hide the progress bar by reducing its opacity.
+            loadingContainer.style.opacity = 0;
+
+            // Remove the loading container from the DOM after a delay for the
+            // animation to complete.
+            await delay(250);
+            loadingContainer.remove();
+
+            // Run the Flutter app.
+            await appRunner.runApp();
+
+            // Add a fade-in effect to the Flutter view.
+            document.querySelector("flutter-view").classList.add("fade-in");
           },
         });
       });
