@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:quran/classes/quran.dart';
-import 'package:quran/constants/api_constants.dart';
+import 'package:quran/utils/api_utils.dart';
 
 class QuranProvider {
   /// Get uathmani script quran for a specific page number.
@@ -11,7 +11,6 @@ class QuranProvider {
     final List<Verse> verses;
 
     try {
-      final dio = await ApiConstants.dioInstance;
       final response = await dio.get(
         requestUrl,
         queryParameters: queryParameters,
@@ -40,7 +39,6 @@ class QuranProvider {
     final List<Verse> verses;
 
     try {
-      final dio = await ApiConstants.dioInstance;
       final response = await dio.get(requestUrl);
 
       if (response.data == null) {

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:quran/classes/chapter.dart';
-import 'package:quran/constants/api_constants.dart';
+import 'package:quran/utils/api_utils.dart';
 
 class ChaptersProvider {
   /// Get all chapters as list.
@@ -10,7 +10,6 @@ class ChaptersProvider {
     final List<Chapter> chapters;
 
     try {
-      final dio = await ApiConstants.dioInstance;
       final response = await dio.get(requestUrl);
 
       if (response.data == null) {
@@ -35,7 +34,6 @@ class ChaptersProvider {
     final Chapter chapter;
 
     try {
-      final dio = await ApiConstants.dioInstance;
       final response = await dio.get(requestUrl);
 
       if (response.data == null) {

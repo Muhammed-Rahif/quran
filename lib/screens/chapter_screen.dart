@@ -1,29 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quran/classes/chapter.dart';
-import 'package:quran/constants/app_contants.dart';
+import 'package:quran/notifiers/chapter_notifier.dart';
 import 'package:quran/widgets/quran_page.dart';
 
-class ChapterScreen extends StatelessWidget {
-  const ChapterScreen({
-    super.key,
-    required this.chapter,
-    this.onBack,
-  });
+class ChapterScreen extends StatefulWidget {
+  const ChapterScreen({super.key});
 
-  final Chapter chapter;
-  final VoidCallback? onBack;
+  @override
+  State<ChapterScreen> createState() => _ChapterScreenState();
+}
+
+class _ChapterScreenState extends State<ChapterScreen> {
+  final PageController controller = PageController(viewportFraction: 1);
+
+  Chapter get chapter => context.read<ChapterNotifier>().chapter!;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!mounted) return;
+
+    context.read<ChapterNotifier>().addListener(() {
+      controller.jumpToPage(chapter.pages.first - 1);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (AppConstants.breakpoint.isActive(context)) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
-      }
-    });
-
-    final ScrollController controller = ScrollController(
-        // initialPage: chapter.pages.first - 1,
-        );
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   // if (AppConstants.breakpoint.isActive(context)) {
+    //   //   Navigator.of(context).popUntil((route) => route.isFirst);
+    //   // }
+    //   // Scrolling to the chapter's first page
+    // });
 
     return Scaffold(
       appBar: AppBar(
@@ -32,22 +42,17 @@ class ChapterScreen extends StatelessWidget {
         leading: IconButton.filled(
           isSelected: true,
           onPressed: () {
-            onBack?.call();
             Navigator.of(context).popUntil((route) => route.isFirst);
           },
           icon: const Icon(Icons.arrow_back_ios_rounded),
         ),
-        shape: AppConstants.breakpoint.isActive(context)
-            ? const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              )
-            : null,
       ),
-      body: ListView.builder(
-        controller: controller,
+      body: ListView(
         scrollDirection: Axis.vertical,
-        itemCount: 604,
-        itemBuilder: (context, indx) => QuranPage(pageNo: indx + 1),
+        controller: controller,
+        // itemCount: 604,
+        // itemBuilder: (context, indx) => QuranPage(pageNo: indx + 1),
+        children: List.generate(604, (indx) => QuranPage(pageNo: indx + 1)),
       ),
     );
   }

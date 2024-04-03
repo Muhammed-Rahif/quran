@@ -14,7 +14,9 @@ dependencies:
   path_provider: ^2.1.2
   google_fonts: ^4.0.4
   dio_cache_interceptor: ^3.5.0
-  dio_cache_interceptor_hive_store: ^3.2.2
+  dio_cache_interceptor_isar_store: ^1.0.1
+  scrollable_positioned_list: ^0.3.8
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
@@ -34,27 +36,21 @@ flutter:
     - family: Surah-Names
       fonts:
         - asset: assets/fonts/sura_names.woff
-    - family: Surah-Names-2
+    - family: QCF-BSML
       fonts:
-        - asset: assets/fonts/sura_names.woff2
-    # - family: Surah-Names
-    #   fonts:
-    #     - asset: assets/fonts/Surah-Names.ttf
-    # - family: QCF-BSML
-    #   fonts:
-    #     - asset: assets/fonts/QCF-BSML.woff
-    # - family: Me-Quran
-    #   fonts:
-    #     - asset: assets/fonts/Me-Quran-Regular.ttf
-    # - family: Uthmanic-Script
-    #   fonts:
-    #     - asset: assets/fonts/Uthmanic-Script-HAFS-Regular.otf
-    # - family: Kitab-Regular
-    #   fonts:
-    #     - asset: assets/fonts/Kitab-Regular.ttf
-    # - family: Uthmanic-Hafs
-    #   fonts:
-    #     - asset: assets/fonts/UthmanicHafs.otf
+        - asset: assets/fonts/QCF-BSML.woff
+    - family: Uthmanic-Script
+      fonts:
+        - asset: assets/fonts/Uthmanic-Script-HAFS-Regular.otf
+    - family: Me-Quran
+      fonts:
+        - asset: assets/fonts/Me-Quran-Regular.ttf
+    - family: Kitab-Regular
+      fonts:
+        - asset: assets/fonts/Kitab-Regular.ttf
+    - family: Uthmanic-Hafs
+      fonts:
+        - asset: assets/fonts/UthmanicHafs1 Ver09.otf
 
 flutter_launcher_icons:
   android: "launcher_icon"

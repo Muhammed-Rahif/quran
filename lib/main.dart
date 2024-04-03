@@ -1,11 +1,22 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:quran/screens/home_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:quran/notifiers/adaptive_layout_notifier.dart';
+import 'package:quran/notifiers/chapter_notifier.dart';
+import 'package:quran/screens/adaptive_screen.dart';
 import 'package:quran/theme/theme.dart';
+import 'package:quran/utils/api_utils.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  await ApiUtils.init();
+
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => ChapterNotifier()),
+      ChangeNotifierProvider(create: (_) => AdaptiveLayoutNotifier()),
+    ], child: const MainApp()),
+  );
 }
 
 class AppScrollBehavior extends MaterialScrollBehavior {
@@ -28,8 +39,8 @@ class MainApp extends StatelessWidget {
         Locale('ar'), // Arabic
       ],
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.data,
-      home: const HomeScreen(),
+      theme: AppTheme.getThemeData(context),
+      home: const AdaptiveScreen(),
     );
   }
 }
