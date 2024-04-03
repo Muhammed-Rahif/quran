@@ -9,7 +9,7 @@ class CustomProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     if (text != null) {
       return SizedBox(
-        height: MediaQuery.of(context).size.height * .8,
+        height: MediaQuery.of(context).size.height * .88,
         child: Center(
           child: Text(
             text!,

@@ -10,8 +10,8 @@ class VersesProvider {
     final List<Verse> verses;
     Map<String, dynamic> queryParameters = {
       'words': true,
-      'word_fields': 'code_v1,code_v2,text_uthmani',
-      'fields': 'code_v1,code_v2,text_uthmani',
+      'word_fields': 'code_v1,code_v2,text_uthmani,chapter_id',
+      'fields': 'code_v1,code_v2,text_uthmani,chapter_id',
     };
 
     try {

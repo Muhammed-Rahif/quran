@@ -15,6 +15,7 @@ dependencies:
   google_fonts: ^4.0.4
   dio_cache_interceptor: ^3.5.0
   dio_cache_interceptor_hive_store: ^3.2.2
+  scrollable_positioned_list: ^0.3.8
 
 dev_dependencies:
   flutter_test:
@@ -34,15 +35,9 @@ flutter:
     - family: Surah-Names
       fonts:
         - asset: assets/fonts/sura_names.woff
-    - family: Surah-Names-2
+    - family: QCF-BSML
       fonts:
-        - asset: assets/fonts/sura_names.woff2
-    # - family: Surah-Names
-    #   fonts:
-    #     - asset: assets/fonts/Surah-Names.ttf
-    # - family: QCF-BSML
-    #   fonts:
-    #     - asset: assets/fonts/QCF-BSML.woff
+        - asset: assets/fonts/QCF-BSML.woff
     # - family: Me-Quran
     #   fonts:
     #     - asset: assets/fonts/Me-Quran-Regular.ttf

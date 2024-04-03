@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:quran/screens/home_screen.dart';
+import 'package:quran/screens/adaptive_screen.dart';
 import 'package:quran/theme/theme.dart';
 
 void main() {
@@ -28,8 +28,8 @@ class MainApp extends StatelessWidget {
         Locale('ar'), // Arabic
       ],
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.data,
-      home: const HomeScreen(),
+      theme: AppTheme.getThemeData(context),
+      home: const AdaptiveScreen(),
     );
   }
 }

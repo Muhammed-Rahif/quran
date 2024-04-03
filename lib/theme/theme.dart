@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quran/constants/app_contants.dart';
 
 class AppColors {
   static const Color primaryColor = Color(0xffEDD681);
@@ -7,7 +8,7 @@ class AppColors {
 }
 
 class AppTheme {
-  static ThemeData get data {
+  static ThemeData getThemeData(BuildContext context) {
     final searchBarColor =
         MaterialStateColor.resolveWith((states) => AppColors.primaryColor);
     final searchViewColor = MaterialStateColor.resolveWith(
@@ -23,10 +24,19 @@ class AppTheme {
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
       ),
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         elevation: 0,
         color: AppColors.primaryColor,
         foregroundColor: AppColors.backgroundColor,
+        shape: AppConstants.breakpoint.isActive(context)
+            ? const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              )
+            : null,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.all(Colors.white),
+        trackColor: MaterialStateProperty.all(AppColors.primaryColor),
       ),
       searchBarTheme: SearchBarThemeData(
         backgroundColor: searchBarColor,
