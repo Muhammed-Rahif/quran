@@ -50,7 +50,7 @@ flutter:
         - asset: assets/fonts/Kitab-Regular.ttf
     - family: Uthmanic-Hafs
       fonts:
-        - asset: assets/fonts/UthmanicHafs1 Ver09.otf
+        - asset: assets/fonts/UthmanicHafs1Ver18.ttf
 
 flutter_launcher_icons:
   android: "launcher_icon"

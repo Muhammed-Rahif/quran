@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:quran/classes/chapter.dart';
 import 'package:quran/notifiers/chapter_notifier.dart';
 import 'package:quran/widgets/quran_page.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ChapterScreen extends StatefulWidget {
   const ChapterScreen({super.key});
@@ -12,17 +13,20 @@ class ChapterScreen extends StatefulWidget {
 }
 
 class _ChapterScreenState extends State<ChapterScreen> {
-  final PageController controller = PageController(viewportFraction: 1);
-
-  Chapter get chapter => context.read<ChapterNotifier>().chapter!;
+  final ItemScrollController itemScrollController = ItemScrollController();
+  Chapter? get chapter {
+    if (!mounted) return null;
+    return context.read<ChapterNotifier>().chapter!;
+  }
 
   @override
   void initState() {
     super.initState();
-    if (!mounted) return;
 
     context.read<ChapterNotifier>().addListener(() {
-      controller.jumpToPage(chapter.pages.first - 1);
+      if (!mounted) return;
+      final index = chapter?.pages.first ?? 1 - 1;
+      itemScrollController.jumpTo(index: index);
     });
   }
 
@@ -36,23 +40,35 @@ class _ChapterScreenState extends State<ChapterScreen> {
     // });
 
     return Scaffold(
-      appBar: AppBar(
-        notificationPredicate: (notification) => true,
-        title: Text(chapter.nameSimple),
-        leading: IconButton.filled(
-          isSelected: true,
-          onPressed: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
-          icon: const Icon(Icons.arrow_back_ios_rounded),
+      body: Container(
+        width: 380,
+        child: ScrollablePositionedList.builder(
+          itemScrollController: itemScrollController,
+          padding: const EdgeInsets.all(10),
+          scrollDirection: Axis.horizontal,
+          initialScrollIndex: chapter!.pages.first - 1,
+          itemCount: 604,
+          itemBuilder: (context, indx) => QuranPage(pageNo: indx + 1),
+          // separatorBuilder: (context, indx) => Row(children: [
+          //   const Expanded(
+          //       child: Divider(
+          //     thickness: 0.1,
+          //     height: 1,
+          //   )),
+          //   Text(
+          //     '  Page ${indx + 1}  ',
+          //     style: const TextStyle(
+          //       color: Colors.white24,
+          //       fontSize: 10,
+          //     ),
+          //   ),
+          //   const Expanded(
+          //       child: Divider(
+          //     thickness: 0.1,
+          //     height: 1,
+          //   )),
+          // ]),
         ),
-      ),
-      body: ListView(
-        scrollDirection: Axis.vertical,
-        controller: controller,
-        // itemCount: 604,
-        // itemBuilder: (context, indx) => QuranPage(pageNo: indx + 1),
-        children: List.generate(604, (indx) => QuranPage(pageNo: indx + 1)),
       ),
     );
   }

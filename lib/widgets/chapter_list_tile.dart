@@ -20,7 +20,7 @@ class ChapterListTile extends StatelessWidget {
       onTap: () {
         context.read<ChapterNotifier>().setChapter(chapter);
 
-        context.read<AdaptiveLayoutNotifier>().navigateTo(
+        context.read<AdaptiveLayoutNotifier>().setBody(
               context,
               const ChapterScreen(),
             );

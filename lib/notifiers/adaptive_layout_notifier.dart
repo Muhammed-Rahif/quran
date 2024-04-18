@@ -6,7 +6,7 @@ class AdaptiveLayoutNotifier extends ChangeNotifier {
 
   Widget? get body => _body;
 
-  navigateTo(BuildContext context, Widget? widget) {
+  setBody(BuildContext context, Widget? widget) {
     _body = widget;
     notifyListeners();
 

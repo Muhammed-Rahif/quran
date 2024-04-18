@@ -55,12 +55,10 @@ class HomeScreen extends StatelessWidget {
             // Go to page
           } else if (i == 2) {
             // Settings
-            context.read<AdaptiveLayoutNotifier>().navigateTo(
+            context.read<AdaptiveLayoutNotifier>().setBody(
               context,
               SettingsScreen(onBack: () {
-                context
-                    .read<AdaptiveLayoutNotifier>()
-                    .navigateTo(context, null);
+                context.read<AdaptiveLayoutNotifier>().setBody(context, null);
               }),
             );
           }
